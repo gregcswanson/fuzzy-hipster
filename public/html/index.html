@@ -38,6 +38,33 @@
       <p class="tagline">
         You fuzzy hipster
       </p>
+      <p>
+        {{#link-to 'lists' class='btn btn-primary btn-lg'}}
+          Browse All {{listsCount}} Lists &raquo;
+        {{/link-to}}
+      </p>
+    </div>
+  </script>
+  <script type='text/x-handlebars' data-template-name='lists'>
+    <div class='row'>
+      <div class='col-md-9'>
+        <h1>Lists   ({{listsCount}})</h1>
+      </div>
+      <div class='col-md-3'>
+        {{#link-to 'index' class='btn btn-primary btn-block'}}Add{{/link-to}}
+      </div>
+    </div>
+    {{outlet}}
+  </script>
+  <script type='text/x-handlebars' data-template-name='lists/index'>
+    <div class='row'>
+      <div class='col-sm-12'>
+        <div class='list-group'>
+          {{#each}}
+            <p>{{title}}</p>
+          {{/each}}
+        </div>
+      </div>
     </div>
   </script>
   <script type='text/x-handlebars' data-template-name='about'>
