@@ -45,18 +45,18 @@
       </p>
     </div>
   </script>
-  <script type='text/x-handlebars' data-template-name='lists'>
+  <script type='text/x-handlebars' data-template-name='lists'>    
+    {{outlet}}
+  </script>
+  <script type='text/x-handlebars' data-template-name='lists/index'>
     <div class='row'>
       <div class='col-md-9'>
         <h1>Lists   ({{listsCount}})</h1>
       </div>
       <div class='col-md-3'>
-        {{#link-to 'index' class='btn btn-primary btn-block'}}Add{{/link-to}}
+        {{#link-to 'lists.new' class='btn btn-primary btn-block'}}Add{{/link-to}}
       </div>
     </div>
-    {{outlet}}
-  </script>
-  <script type='text/x-handlebars' data-template-name='lists/index'>
     <div class='row'>
       <div class='col-sm-12'>
         <div class='list-group'>
@@ -64,6 +64,21 @@
             <p>{{title}}</p>
           {{/each}}
         </div>
+      </div>
+    </div>
+  </script>
+  <script type='text/x-handlebars' data-template-name='lists/new'>
+    <div class='row'>
+      <div class='col-md-9'>
+        <h1>New List</h1>
+      </div>
+    </div>    
+    <div class='row'>
+      <div class='col-md-9'>
+        
+      </div>
+      <div class='col-md-3'>
+        {{#link-to 'lists' class='btn btn-warning btn-block'}}Cancel{{/link-to}}
       </div>
     </div>
   </script>

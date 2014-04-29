@@ -4,7 +4,8 @@ var App = Ember.Application.create({
 
 App.Router.map(function() {
   this.resource('lists', function() {
-    this.resource('list', { path: '/:list_id' });
+    this.route('new');
+    this.resource('list', { path: 'list/:list_id' });
   });
   this.route('about', { path: '/about' });
 });
