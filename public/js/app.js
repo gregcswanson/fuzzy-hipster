@@ -19,6 +19,19 @@ App.ListsController = Ember.ArrayController.extend({
   listsCount: Ember.computed.alias('length')
 });
 
+App.ListsNewController = Ember.ObjectController.extend({
+  actions: {
+    createList: function() { 
+      var list = this.store.createRecord('list', { 
+         title: this.get('title'), 
+         description: this.get('description')
+       });
+      list.save();
+      this.transitionToRoute('lists');
+    }
+  } 
+});
+
 App.IndexRoute = Ember.Route.extend({
   model: function() {
     return this.store.findAll('list');
@@ -28,6 +41,12 @@ App.IndexRoute = Ember.Route.extend({
 App.ListsRoute = Ember.Route.extend({
   model: function() {
     return this.store.findAll('list');
+  }
+});
+
+App.ListsNewRoute = Ember.Route.extend({
+  model: function() {
+    return {'title': 'new title', 'description': ''};
   }
 });
 
