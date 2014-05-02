@@ -5,7 +5,9 @@ var App = Ember.Application.create({
 App.Router.map(function() {
   this.resource('lists', function() {
     this.route('new');
-    this.resource('list', { path: 'list/:list_id' });
+  });
+  this.resource('list', { path: 'list/:list_id' }, function() {
+    this.route("edit", { path: "/edit" });
   });
   this.route('about', { path: '/about' });
 });
@@ -19,6 +21,15 @@ App.ListsController = Ember.ArrayController.extend({
   listsCount: Ember.computed.alias('length')
 });
 
+App.ListEditRoute = Ember.Route.extend({
+  deactivate: function() {
+    var model = this.controller.content;
+    if ( (model.get('isNew') || model.get('isDirty')) && (!model.get('isSaving')) ) {
+      model.rollback();
+    }
+  }
+});
+
 App.ListsNewController = Ember.ObjectController.extend({
   actions: {
     createList: function() { 
@@ -28,6 +39,16 @@ App.ListsNewController = Ember.ObjectController.extend({
        });
       list.save();
       this.transitionToRoute('lists');
+    }
+  } 
+});
+
+App.ListEditController = Ember.ObjectController.extend({
+  actions: {
+    save: function() { 
+      var model = this.get('model');
+      model.save();
+      this.transitionToRoute('list.index');
     }
   } 
 });

@@ -61,7 +61,7 @@
       <div class='col-sm-12'>
         <div class='list-group'>
           {{#each}}
-            <p>{{title}}</p>
+            <p>{{title}} {{#link-to 'list.edit' this}}edit{{/link-to}} | {{#link-to 'list' this}}view{{/link-to}}</p>
           {{/each}}
         </div>
       </div>
@@ -88,6 +88,48 @@
       </div>
       <div class='col-md-3'>
         <button {{action 'createList'}} class='btn btn-primary btn-block'>Save</button>
+      </div>
+    </div>
+  </script>
+  <script type='text/x-handlebars' data-template-name='list'>  
+    <h3>List</h3>
+    {{outlet}}
+  </script>
+  <script type='text/x-handlebars' data-template-name='list/index'>
+    <div class='row'>
+      <div class='col-md-9'>
+        <h1>List [{{title}}] </h1>
+      </div>
+      <div class='col-md-3'>
+        {{#link-to 'list.edit' this}}edit{{/link-to}} | {{#link-to 'lists.new' class='btn btn-primary btn-block'}}Add{{/link-to}}
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col-sm-12'>
+      </div>
+    </div>
+  </script>
+  <script type='text/x-handlebars' data-template-name='list/edit'>
+    <div class='row'>
+      <div class='col-md-9'>
+        <h1>Edit List</h1>
+      </div>
+    </div>    
+    <div class='row'>
+      <label>Title</label><br />
+       {{input valueBinding='title'}}<br />
+      <label>Description</label><br />
+       {{textarea valueBinding='description'}}
+    </div>
+    <div class='row'>
+      <div class='col-md-6'>
+       
+      </div>
+      <div class='col-md-3'>
+        {{#link-to 'list' this class='btn btn-warning btn-block'}}Cancel{{/link-to}}
+      </div>
+      <div class='col-md-3'>
+        <button {{action 'save'}} class='btn btn-primary btn-block'>Save</button>
       </div>
     </div>
   </script>
