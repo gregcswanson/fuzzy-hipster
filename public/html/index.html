@@ -61,7 +61,9 @@
       <div class='col-sm-12'>
         <div class='list-group'>
           {{#each}}
-            <p>{{title}} {{#link-to 'list.edit' this}}edit{{/link-to}} | {{#link-to 'list' this}}view{{/link-to}}</p>
+            <p>{{title}} {{#link-to 'list.delete' this class='btn btn-warning'}}delete{{/link-to}} 
+            {{#link-to 'list.edit' this class='btn'}}edit{{/link-to}}
+            {{#link-to 'list' this class='btn'}}view{{/link-to}}</p>
           {{/each}}
         </div>
       </div>
@@ -101,7 +103,7 @@
         <h1>List [{{title}}] </h1>
       </div>
       <div class='col-md-3'>
-        {{#link-to 'list.edit' this}}edit{{/link-to}} | {{#link-to 'lists.new' class='btn btn-primary btn-block'}}Add{{/link-to}}
+        {{#link-to 'list.delete' this class='btn btn-warning'}}delete{{/link-to}} | {{#link-to 'list.edit' this class='btn btn-primary'}}edit{{/link-to}} | {{#link-to 'lists.new' class='btn'}}Add{{/link-to}}
       </div>
     </div>
     <div class='row'>
@@ -130,6 +132,27 @@
       </div>
       <div class='col-md-3'>
         <button {{action 'save'}} class='btn btn-primary btn-block'>Save</button>
+      </div>
+    </div>
+  </script>
+  <script type='text/x-handlebars' data-template-name='list/delete'>
+    <div class='row'>
+      <div class='col-md-9'>
+        <h1>Confirm Delete</h1>
+      </div>
+    </div>    
+    <div class='row'>
+       <p>Confirm delete of '{{title}}'?</p>
+    </div>
+    <div class='row'>
+      <div class='col-md-6'>
+       
+      </div>
+      <div class='col-md-3'>
+        {{#link-to 'list' this class='btn btn-warning btn-block'}}Cancel{{/link-to}}
+      </div>
+      <div class='col-md-3'>
+        <button {{action 'deleteList'}} class='btn btn-warning btn-block'>Delete</button>
       </div>
     </div>
   </script>

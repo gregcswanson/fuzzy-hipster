@@ -8,6 +8,7 @@ App.Router.map(function() {
   });
   this.resource('list', { path: 'list/:list_id' }, function() {
     this.route("edit", { path: "/edit" });
+    this.route("delete");
   });
   this.route('about', { path: '/about' });
 });
@@ -49,6 +50,17 @@ App.ListEditController = Ember.ObjectController.extend({
       var model = this.get('model');
       model.save();
       this.transitionToRoute('list.index');
+    }
+  } 
+});
+
+App.ListDeleteController = Ember.ObjectController.extend({
+  actions: {
+    deleteList: function() { 
+      var controller = this;
+      var model = this.get('model').destroyRecord().then(function() {
+        controller.transitionToRoute('lists');
+       });
     }
   } 
 });
