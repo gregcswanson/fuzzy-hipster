@@ -10,6 +10,19 @@
     <script src='/js/app.js'></script>
 </head>
 <body>
+  <script type="text/x-handlebars" data-template-name="loading">
+    <div class="row">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+      <div class="progress progress-striped">
+        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" area-valuemin="0" aria-valuemax="100" style="width: 100%">
+          <span class="sr-only">text</span>
+        </div>
+      </div>
+      </div>
+    <div class="col-md-4"></div>
+    </div>
+  </script>
     <script type='text/x-handlebars' data-template-name='application'>
       <div class="row-fluid">
         <div class="navbar navbar-inverse">
@@ -94,7 +107,7 @@
     </div>
   </script>
   <script type='text/x-handlebars' data-template-name='list'>  
-    <h3>List</h3>
+    {{#link-to 'lists' class='btn btn-link'}}Back to lists{{/link-to}}
     {{outlet}}
   </script>
   <script type='text/x-handlebars' data-template-name='list/index'>
@@ -106,10 +119,7 @@
         {{#link-to 'list.delete' this class='btn btn-warning'}}delete{{/link-to}} | {{#link-to 'list.edit' this class='btn btn-primary'}}edit{{/link-to}} | {{#link-to 'lists.new' class='btn'}}Add{{/link-to}}
       </div>
     </div>
-    <div class='row'>
-      <div class='col-sm-12'>
-      </div>
-    </div>
+    {{render 'items' items}}
   </script>
   <script type='text/x-handlebars' data-template-name='list/edit'>
     <div class='row'>
@@ -118,20 +128,42 @@
       </div>
     </div>    
     <div class='row'>
-      <label>Title</label><br />
-       {{input valueBinding='title'}}<br />
-      <label>Description</label><br />
-       {{textarea valueBinding='description'}}
+      <div class='col-md-4'>
+        <label>Title</label>
+      </div>
+      <div class='col-md-8'>
+        {{input valueBinding='title' class='form-control'}}
+      </div>
     </div>
     <div class='row'>
-      <div class='col-md-6'>
-       
+      <div class='col-md-4'>
+        <label>Description</label>
       </div>
+      <div class='col-md-8'>
+        {{textarea valueBinding='description' class='form-control'}}
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col-md-9'>
+        <h4>Items</h4>
+      </div>
+    </div>    
+    {{render 'items.edit' items}}
+     <div class='row'>
+        <div class='col-xs-10 col-md-11 text-right'></div>
+        <div class='col-xs-2 col-md-1'>
+            <button {{action 'addItem'}} class='btn btn-primary btn-block'><span class="glyphicon glyphicon-plus"></span></button>
+        </div>
+      </div>
+    <div class='row'>
       <div class='col-md-3'>
-        {{#link-to 'list' this class='btn btn-warning btn-block'}}Cancel{{/link-to}}
+        {{#link-to 'list' this class='btn btn-warning btn-block'}}Done (auto save){{/link-to}}
       </div>
       <div class='col-md-3'>
         <button {{action 'save'}} class='btn btn-primary btn-block'>Save</button>
+      </div>
+      <div class='col-md-6'>
+        
       </div>
     </div>
   </script>
@@ -164,6 +196,33 @@
       </p>
     </div>
   </script>
-    
+  <script type='text/x-handlebars' data-template-name='items'>
+    {{#each}}
+      <div class='row'>
+        <div class='col-xs-10 col-md-11'>
+          {{name}}
+        </div>
+        <div class='col-xs-2 col-md-1'>
+          {{#if isDone}}
+            <button {{action 'toggleIsDone' this}} class='btn btn-success btn-block'><span class="glyphicon glyphicon-ok"></span></button>
+          {{else}}
+            <button {{action 'toggleIsDone' this}} class='btn btn-danger btn-block'><span class="glyphicon glyphicon-remove"></span></button>
+          {{/if}}
+        </div>
+      </div>
+    {{/each}}
+  </script>
+  <script type='text/x-handlebars' data-template-name='items/edit'>
+    {{#each}}
+      <div class='row'>
+        <div class='col-xs-10 col-md-11'>
+          {{input valueBinding='name' class='form-control'}}
+        </div>
+        <div class='col-xs-2 col-md-1'>
+            <button {{action 'removeItem' this}} class='btn btn-danger btn-block'><span class="glyphicon glyphicon-remove"></span></button>
+        </div>
+      </div>
+    {{/each}}
+  </script>
 </body>
 </html>
