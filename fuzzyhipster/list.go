@@ -34,7 +34,7 @@ type ItemJSON struct {
   Item Item `json:"item"`
 }
 
-type ListsJSON struct {
+type ItemsJSON struct {
   Items []Item `json:"items"`
 }
 
@@ -46,6 +46,33 @@ func InitList() {
   if lists == nil {
       lists = []List{}
     }
+  
+
+	list := List{
+    Id: strconv.Itoa(idCounter),
+    Title: "Title One",
+    Description: "Description One",
+  }
+  
+  idCounter++    
+
+  lists = append(lists, list)
+  
+  lists = append(lists, List{
+    Id: strconv.Itoa(idCounter),
+    Title: "Title Two",
+    Description: "Description Two",
+  })
+  
+  newLists := []List{
+    {"a", "A", "AA", },
+    {"b", "B", "BB", },
+  }
+  
+  lists = append(lists, newLists...)
+  
+  idCounter++ 
+  
 }
 
 func ListHandler(w http.ResponseWriter, r *http.Request) {
