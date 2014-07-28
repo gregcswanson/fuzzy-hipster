@@ -5,6 +5,7 @@ import (
     "net/http"
     "encoding/json"
     "strconv"
+    "src/usecases"
 	  "github.com/gorilla/mux"
 )
 
@@ -104,7 +105,7 @@ func ListHandler(w http.ResponseWriter, r *http.Request) {
     w.Write(j)
 }
 
-func ListsHandler(w http.ResponseWriter, r *http.Request) {
+func ListsHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors) {
     if lists == nil {
       lists = []List{}
     }  

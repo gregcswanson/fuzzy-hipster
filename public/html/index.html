@@ -49,12 +49,18 @@
     <div class="jumbotron">
       <h1>Do Something!</h1>
       <p class="tagline">
-        You fuzzy hipster
+        You {{username}}fuzzy hipster
+      </p>
+      <p>
+      <i>{{token}}</i>
       </p>
       <p>
         {{#link-to 'lists' class='btn btn-primary btn-lg'}}
-          Browse All {{listsCount}} Lists &raquo;
+          Browse All Lists &raquo;
         {{/link-to}}
+      </p>
+      <p>
+        <button {{action 'getToken'}} class='btn btn-success btn-lg'>Get Token</button>
       </p>
     </div>
   </script>

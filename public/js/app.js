@@ -13,8 +13,30 @@ App.Router.map(function() {
   this.route('about', { path: '/about' });
 });
 
-App.IndexController = Ember.ArrayController.extend({
-  listsCount: Ember.computed.alias('length')
+App.IndexController = Ember.ObjectController.extend({
+  //listsCount: Ember.computed.alias('length'),
+  actions: {
+    getToken: function() { 
+      //$.getJSON("/api/1/gettoken", // ).then(
+      //  function(response) {
+      //    App.Settings.token = response.token;
+          //alert(response.token);
+          // use the token
+           $.ajax({
+              url: '/api/1/checktoken',
+              type: 'GET',
+              dataType: 'json',
+              success: function(response) { alert(response.token); },
+              error: function() { alert('no'); }//,
+              //beforeSend: function (request)
+              //{
+              //    request.setRequestHeader("Authorization-Token", App.Settings.token); //response.token);
+             // }
+            });
+      //  }
+      //).fail(function(){ location.reload(); });
+    }
+  } 
 });
 
 App.ListsController = Ember.ArrayController.extend({
@@ -106,7 +128,8 @@ App.ListDeleteController = Ember.ObjectController.extend({
 
 App.IndexRoute = Ember.Route.extend({
   model: function() {
-    return this.store.findAll('list');
+    return App.Settings.find();
+    //return this.store.findAll('list');
   }
 });
 
@@ -147,6 +170,27 @@ App.ListHeader.reopenClass({
     );
   }
 
+});
+
+// Settings
+App.Settings = Ember.Object.extend({ 
+  token : '', 
+  username: ''
+});
+
+App.Settings.reopenClass({
+  find: function() {
+    return $.getJSON("/api/1/gettoken",
+        function(response) {
+          $.ajaxSetup({
+            beforeSend: function(xhr) {
+              xhr.setRequestHeader('Authorization-Token', response.token);
+            }
+          });
+          return App.Settings.create(response);
+        }
+      ).fail(function(){ location.reload(); });
+  }
 });
 
 // Ember data
