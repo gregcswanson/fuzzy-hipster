@@ -18,21 +18,35 @@ type TokenResponseJSON struct {
 }
 
 func init() {
-    r := mux.NewRouter()
-    // authentication
+  r := mux.NewRouter()
+  // authentication
     
-    r.HandleFunc("/api/1/gettoken", authenticated(handlerGetToken)).Methods("GET")
-    r.HandleFunc("/api/1/checktoken", handlerCheckToken).Methods("GET")
-    r.HandleFunc("/api/1/token", TokenHandler).Methods("GET")
-    r.HandleFunc("/api/1/tokenread", TokenReadHander).Methods("GET")
+  r.HandleFunc("/api/1/gettoken", authenticated(handlerGetToken)).Methods("GET")
+  r.HandleFunc("/api/1/checktoken", handlerCheckToken).Methods("GET")
+  r.HandleFunc("/api/1/token", TokenHandler).Methods("GET")
+  r.HandleFunc("/api/1/tokenread", TokenReadHander).Methods("GET")
   
-    // lists
-    r.HandleFunc("/api/1/lists", useCaseMiddleware(ListsHandler)).Methods("GET")
-    r.HandleFunc("/api/1/lists/{id}", ListHandler).Methods("GET")
-    r.HandleFunc("/api/1/lists", CreateListHandler).Methods("POST")
-    r.HandleFunc("/api/1/lists/{id}", UpdateListHandler).Methods("PUT")
-    r.HandleFunc("/api/1/lists/{id}", DeleteListHandler).Methods("DELETE")
-    // items
+  // projects
+  r.HandleFunc("/api/1/projects", useCaseMiddleware(ListsHandler)).Methods("GET")
+  r.HandleFunc("/api/1/projects/{id}", ListHandler).Methods("GET")
+  r.HandleFunc("/api/1/projects", CreateListHandler).Methods("POST")
+  r.HandleFunc("/api/1/projects/{id}", UpdateListHandler).Methods("PUT")
+  r.HandleFunc("/api/1/projects/{id}", DeleteListHandler).Methods("DELETE")
+  
+  // project lines
+  r.HandleFunc("/api/1/projectlines", CreateListHandler).Methods("POST")
+  r.HandleFunc("/api/1/projectlines/{id}", UpdateListHandler).Methods("PUT")
+  r.HandleFunc("/api/1/projectlines/{id}", DeleteListHandler).Methods("DELETE")
+  
+  
+  // lists
+  r.HandleFunc("/api/1/lists", useCaseMiddleware(ListsHandler)).Methods("GET")
+  r.HandleFunc("/api/1/lists/{id}", ListHandler).Methods("GET")
+  r.HandleFunc("/api/1/lists", CreateListHandler).Methods("POST")
+  r.HandleFunc("/api/1/lists/{id}", UpdateListHandler).Methods("PUT")
+  r.HandleFunc("/api/1/lists/{id}", DeleteListHandler).Methods("DELETE")
+  
+  // items
     r.HandleFunc("/api/1/items", ItemsHandler).Methods("GET")
     r.HandleFunc("/api/1/items/{id}", ItemHandler).Methods("GET")
   

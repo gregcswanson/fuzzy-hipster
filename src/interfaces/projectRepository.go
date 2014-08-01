@@ -15,10 +15,28 @@ func NewProjectRepository(request *http.Request) *ProjectRepository {
 	return projectRepository
 }
 
+func Get(ID string)(domain.Project, error) {
+  // create the namespace context
+  globalContext := appengine.NewContext(repository.request)
+  c, _ := appengine.Namespace(globalContext, repository.namespace)
+  
+  // get the key
+  key , err := datastore.DecodeKey(ID)
+	if err != nil {
+	  return _, err
+	}
+  // retrieve the project
+  var project domain.Project
+	err = datastore.Get(c, key, &project);
+	
+  return project, err
+}
+
 func (repository *ProjectRepository) Store(item domain.Project) (domain.Project, error) {
 	// upsert operation
-	c := appengine.NewContext(repository.request)
-	if item.ID != "" {
+	globalContext := appengine.NewContext(repository.request)
+  c, _ := appengine.Namespace(globalContext, repository.namespace)
+  if item.ID != "" {
 		// update
 		key , err := datastore.DecodeKey(item.ID)
 		if err != nil {
@@ -41,7 +59,15 @@ func (repository *ProjectRepository) Store(item domain.Project) (domain.Project,
 }
 
 func (repository *ProjectRepository) Delete(item domain.Project) error {
-  return nil
+  globalContext := appengine.NewContext(repository.request)
+  c, _ := appengine.Namespace(globalContext, repository.namespace)
+  
+  key , err := datastore.DecodeKey(item.ID)
+	if err != nil {
+		return err
+	}
+	err = datastore.Delete(c, key)
+  return err
 }
 
 func (repository *ProjectRepository) Find(bookID string, active bool) ([]domain.Project, error) {

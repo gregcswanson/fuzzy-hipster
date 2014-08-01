@@ -7,6 +7,7 @@ import (
 )
 
 type Interactors struct {
+  Projects ProjectInteractor
   Lists ListInteractor 
   User  UserInteractor
 }
@@ -28,6 +29,10 @@ func NewInteractors(request *http.Request, namespace string) *Interactors {
   
 	interactors.Lists = ListInteractor{}
 	interactors.Lists.Context = *context
+  
+  interactors.Projects = ProjectInteractor{}
+  interactors.Projects.Context = *context
+  
 	return interactors
 }
 
