@@ -1,8 +1,8 @@
 package domain
 
-import {
+import (
   "time"
-}
+)
 
 type ProjectRepository interface {
 	Store(project Project) (Project, error)

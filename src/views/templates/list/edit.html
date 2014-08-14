@@ -1,0 +1,44 @@
+<div class='row'>
+      <div class='col-md-9'>
+        <h1>Edit List</h1>
+      </div>
+    </div>    
+    <div class='row'>
+      <div class='col-md-4'>
+        <label>Title</label>
+      </div>
+      <div class='col-md-8'>
+        {{input valueBinding='title' class='form-control'}}
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col-md-4'>
+        <label>Description</label>
+      </div>
+      <div class='col-md-8'>
+        {{textarea valueBinding='description' class='form-control'}}
+      </div>
+    </div>
+    <div class='row'>
+      <div class='col-md-9'>
+        <h4>Items</h4>
+      </div>
+    </div>    
+    {{render 'items.edit' items}}
+     <div class='row'>
+        <div class='col-xs-10 col-md-11 text-right'></div>
+        <div class='col-xs-2 col-md-1'>
+            <button {{action 'addItem'}} class='btn btn-primary btn-block'><span class="glyphicon glyphicon-plus"></span></button>
+        </div>
+      </div>
+    <div class='row'>
+      <div class='col-md-3'>
+        {{#link-to 'list' this class='btn btn-warning btn-block'}}Done (auto save){{/link-to}}
+      </div>
+      <div class='col-md-3'>
+        <button {{action 'save'}} class='btn btn-primary btn-block'>Save</button>
+      </div>
+      <div class='col-md-6'>
+        
+      </div>
+    </div>

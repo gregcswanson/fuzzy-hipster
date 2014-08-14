@@ -27,7 +27,7 @@ func init() {
   r.HandleFunc("/api/1/tokenread", TokenReadHander).Methods("GET")
   
   // projects
-  r.HandleFunc("/api/1/projects", useCaseMiddleware(ListsHandler)).Methods("GET")
+  r.HandleFunc("/api/1/projects", useCaseMiddleware(ProjectsHandler)).Methods("GET")
   r.HandleFunc("/api/1/projects/{id}", ListHandler).Methods("GET")
   r.HandleFunc("/api/1/projects", CreateListHandler).Methods("POST")
   r.HandleFunc("/api/1/projects/{id}", UpdateListHandler).Methods("PUT")
@@ -51,13 +51,24 @@ func init() {
     r.HandleFunc("/api/1/items/{id}", ItemHandler).Methods("GET")
   
   
+  r.HandleFunc("/app", handlerBundleApp).Methods("GET")
   r.HandleFunc("/logout", logout).Methods("GET")
-  r.HandleFunc("/", authenticate(handler)).Methods("GET")
+  r.HandleFunc("/", authenticate(handlerBundle)).Methods("GET")
   // Everything else fails.
   //r.HandleFunc("/{path:.*}", pageNotFound)
   http.Handle("/", r)
   
   InitList()
+}
+
+func handlerBundle(w http.ResponseWriter, r *http.Request) {
+  htmlPage := bundle()
+  fmt.Fprint(w, htmlPage)
+}
+
+func handlerBundleApp(w http.ResponseWriter, r *http.Request) {
+  htmlPage := bundleJavascript()
+  fmt.Fprint(w, htmlPage)
 }
 
 // logout
@@ -374,17 +385,4 @@ func authenticateRequest(w http.ResponseWriter, r *http.Request) (string, error)
   return "steve", nil
 }
 
-func bundle() {
-  /*
-
-  buf := bytes.NewBuffer(nil)
-  for _, filename := range filenames {
-    f, _ := os.Open(filename) // Error handling elided for brevity.
-    io.Copy(buf, f)           // Error handling elided for brevity.
-    f.Close()
-  }
-  s := string(buf.Bytes())
-
-  */
-}
 

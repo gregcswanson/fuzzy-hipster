@@ -44,7 +44,7 @@ func useCaseMiddleware(handler UseCaseHandler) http.HandlerFunc {
    return func(w http.ResponseWriter, r *http.Request) {
       // check the request header for the token
       authority := r.Header.Get("Authorization-Token")
-
+      
       // read the authorisation token
       if authority == "" {
         w.WriteHeader(http.StatusUnauthorized)

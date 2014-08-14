@@ -1,0 +1,10 @@
+{{#each}}
+      <div class='row'>
+        <div class='col-xs-10 col-md-11'>
+          {{input valueBinding='name' class='form-control'}}
+        </div>
+        <div class='col-xs-2 col-md-1'>
+            <button {{action 'removeItem' this}} class='btn btn-danger btn-block'><span class="glyphicon glyphicon-remove"></span></button>
+        </div>
+      </div>
+    {{/each}}

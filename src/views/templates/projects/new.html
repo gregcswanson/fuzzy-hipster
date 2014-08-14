@@ -1,0 +1,17 @@
+<div class='row'>
+      <div class='col-md-9'>
+        <h1>New project</h1>
+      </div>
+    </div>    
+    <div class='row'>
+      <label>Title</label><br />
+       {{input valueBinding='title'}}<br />
+    </div>
+    <div class='row'>
+      <div class='col-md-offset-6 col-md-3'>
+        {{#link-to 'projects' class='btn btn-warning btn-block'}}Cancel{{/link-to}}
+      </div>
+      <div class='col-md-3'>
+        <button {{action 'createProject'}} class='btn btn-primary btn-block'>Save</button>
+      </div>
+</div>

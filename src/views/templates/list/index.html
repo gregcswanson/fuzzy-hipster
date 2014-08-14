@@ -1,0 +1,9 @@
+<div class='row'>
+      <div class='col-md-9'>
+        <h1>List [{{title}}] </h1>
+      </div>
+      <div class='col-md-3'>
+        {{#link-to 'list.delete' this class='btn btn-warning'}}delete{{/link-to}} | {{#link-to 'list.edit' this class='btn btn-primary'}}edit{{/link-to}} | {{#link-to 'lists.new' class='btn'}}Add{{/link-to}}
+      </div>
+    </div>
+    {{render 'items' items}}

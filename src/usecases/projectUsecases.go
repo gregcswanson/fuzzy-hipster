@@ -4,6 +4,8 @@ import (
 	"src/interfaces"
   "src/domain"
   "time"
+  "errors"
+  //"log"
 )
 
 type Project struct {
@@ -23,13 +25,17 @@ type ProjectInteractor struct {
 
 func (interactor *ProjectInteractor) FindActive() ([]Project, error) {
 	// get the active projects
-  activeProjects := interactor.Context.Projects.Find("", true)
+  //log.Println("usecases.FindActive 1")
+  activeProjects, _ := interactor.Context.Projects.Find("", true)
+  //log.Println("usecases.FindActive 2")
 	// Copy to the use case model
   var projects []Project
 	projects = make([]Project, len(activeProjects))
+  //log.Println("usecases.FindActive 3")
 	for i, project := range activeProjects {
-		projects[i] = Project{project.Id, project.Title}
+		projects[i] = Project{project.ID, project.Title}
 	}
+  //log.Println("usecases.FindActive 4")
 	return projects, nil
 }
 
@@ -44,22 +50,22 @@ func (interactor *ProjectInteractor) Save(project Project) (Project, error) {
 	entity := domain.Project{}
   if project.ID != "" {
     // get the current entity
-    entity, err = interactor.Context.Projects.Get(project.ID)
+    entity, _ = interactor.Context.Projects.Get(project.ID)
   } else {
     // setup the new record
     entity.Count = 0
     entity.Open = 0
     entity.Active = true
-    entity.Open = time.Now()
-    entity.End time.Now()
+    entity.Start = time.Now()
+    entity.End = time.Now()
     entity.BookID = ""
   }
 	entity.Title = project.Title
   
 	// save
-	entity, err := interactor.Context.Projects.Store(entity)
+	storedEntity, err := interactor.Context.Projects.Store(entity)
 	if err == nil {
-		project.ID = entity.ID
+		project.ID = storedEntity.ID
 	}
 	
 	return project, err

@@ -15,7 +15,9 @@ func NewProjectRepository(request *http.Request) *ProjectRepository {
 	return projectRepository
 }
 
-func Get(ID string)(domain.Project, error) {
+func (repository *ProjectRepository) Get(ID string)(domain.Project, error) {
+  var project domain.Project
+
   // create the namespace context
   globalContext := appengine.NewContext(repository.request)
   c, _ := appengine.Namespace(globalContext, repository.namespace)
@@ -23,11 +25,10 @@ func Get(ID string)(domain.Project, error) {
   // get the key
   key , err := datastore.DecodeKey(ID)
 	if err != nil {
-	  return _, err
+	  return project, err
 	}
   // retrieve the project
-  var project domain.Project
-	err = datastore.Get(c, key, &project);
+  	err = datastore.Get(c, key, &project);
 	
   return project, err
 }

@@ -1,0 +1,24 @@
+<div class="row-fluid">
+        <div class="navbar navbar-inverse">
+            <div class="container">
+              <div class="navbar-inner">
+                  {{#link-to 'index' class='navbar-brand'}}Fuzzy Hipster{{/link-to}}
+                  <ul class='nav navbar-nav navbar-right'>
+                    {{#if isAuthenticated}}
+                    {{#link-to 'index' tagName='li'}}{{#link-to 'index' tagName='a'}}Home{{/link-to}}{{/link-to}}
+					          {{#link-to 'projects' tagName='li'}}{{#link-to 'projects' tagName='a'}}Projects{{/link-to}}{{/link-to}}
+                    {{/if}}
+                    {{#link-to 'about' tagName='li'}}{{#link-to 'about' tagName='a'}}About{{/link-to}}{{/link-to}}
+                  </ul>
+              </div>
+            </div>
+        </div>
+      </div>
+      <div class="container">
+        {{token}}        
+        {{outlet}}
+      </div>
+      <footer class='container'>
+        <hr />
+        <p class='pull-left'>&copy; 2014 Fuzzy Hipster</p>
+      </footer>
