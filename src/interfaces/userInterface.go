@@ -29,7 +29,7 @@ func (repository *UserRepository) FindCurrent() domain.User {
     user.IsLoggedIn = false
   } else {
     user.Id = u.ID
-    user.Name = ""
+    user.Name =  u.ID
     user.Nickname = ""
     user.Email = u.Email
     user.IsLoggedIn = true

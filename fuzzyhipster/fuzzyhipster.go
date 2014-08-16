@@ -232,6 +232,57 @@ func decodeTokenUsername(tokenString string) string {
   //fmt.Fprint(w, foo)
 }
 
+func decodeTokenNamespace(tokenString string) string {
+    
+  const sample = "something"
+  key := []byte(sample)
+  
+  token, err := jwt.Parse(tokenString, func(token *jwt.Token) ([]byte, error) {
+		// since we only use the one private key to sign the tokens,
+		// we also only use its public counter part to verify
+		return key, nil
+	})
+  
+  // branch out into the possible error from signing
+	switch err.(type) {
+ 
+	case nil: // no error
+ 
+		if !token.Valid { // but may still be invalid
+			//w.WriteHeader(http.StatusUnauthorized)
+			//fmt.Fprintln(w, "WHAT? Invalid Token? F*** off!")
+			return ""
+		}
+ 
+	case *jwt.ValidationError: // something was wrong during the validation
+		vErr := err.(*jwt.ValidationError)
+ 
+		switch vErr.Errors {
+		case jwt.ValidationErrorExpired:
+			//w.WriteHeader(http.StatusUnauthorized)
+			//fmt.Fprintln(w, "Token Expired, get a new one.")
+			return ""
+ 
+		default:
+			//w.WriteHeader(http.StatusInternalServerError)
+			//fmt.Fprintln(w, "Error while Parsing Token!")
+			//log.Printf("ValidationError error: %+v\n", vErr.Errors)
+			return ""
+		}
+ 
+	default: // something else went wrong
+		//w.WriteHeader(http.StatusInternalServerError)
+		//fmt.Fprintln(w, "Error while Parsing Token!")
+		//log.Printf("Token parse error: %v\n", err)
+		return ""
+	}
+  
+  username, _ := token.Claims["namespace"].(string)
+  return username
+  //fmt.Fprint(w, foo)
+}
+
+
 func createToken(w http.ResponseWriter, r *http.Request) (string, error) {
   
   useCases := usecases.NewInteractors(r, "")
@@ -247,6 +298,7 @@ func createToken(w http.ResponseWriter, r *http.Request) (string, error) {
   
   token := jwt.New(jwt.GetSigningMethod("HS256"))
   token.Claims["username"] = user.Email
+  token.Claims["namespace"] =  user.Id
   token.Claims["exp"] = time.Now().Add(time.Minute * 10).Unix()
   
   key := []byte(sample)

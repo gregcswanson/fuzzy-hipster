@@ -5,7 +5,7 @@ import (
   "src/domain"
   "time"
   "errors"
-  //"log"
+  "log"
 )
 
 type Project struct {
@@ -25,13 +25,13 @@ type ProjectInteractor struct {
 
 func (interactor *ProjectInteractor) FindActive() ([]Project, error) {
 	// get the active projects
-  //log.Println("usecases.FindActive 1")
+  log.Println("usecases.FindActive 1")
   activeProjects, _ := interactor.Context.Projects.Find("", true)
-  //log.Println("usecases.FindActive 2")
+  log.Println("usecases.FindActive 2")
 	// Copy to the use case model
   var projects []Project
 	projects = make([]Project, len(activeProjects))
-  //log.Println("usecases.FindActive 3")
+  log.Println("usecases.FindActive 3")
 	for i, project := range activeProjects {
 		projects[i] = Project{project.ID, project.Title}
 	}

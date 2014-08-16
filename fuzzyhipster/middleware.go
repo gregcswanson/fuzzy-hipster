@@ -50,9 +50,10 @@ func useCaseMiddleware(handler UseCaseHandler) http.HandlerFunc {
         w.WriteHeader(http.StatusUnauthorized)
         return
       } 
-      username := decodeTokenUsername(authority)
+      //username := decodeTokenUsername(authority)
+     namespance := decodeTokenNamespace(authority)
       // create the use case service
-      useCases := usecases.NewInteractors(r, username)
+      useCases := usecases.NewInteractors(r, namespance)
       handler(w, r, useCases)
     }
 }

@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"appengine"
 	"appengine/datastore"
+  "log"
 )
 
 type ProjectRepository BaseRepository
@@ -23,7 +24,7 @@ func (repository *ProjectRepository) Get(ID string)(domain.Project, error) {
   c, _ := appengine.Namespace(globalContext, repository.namespace)
   
   // get the key
-  key , err := datastore.DecodeKey(ID)
+  key, err := datastore.DecodeKey(ID)
 	if err != nil {
 	  return project, err
 	}
@@ -74,18 +75,37 @@ func (repository *ProjectRepository) Delete(item domain.Project) error {
 func (repository *ProjectRepository) Find(bookID string, active bool) ([]domain.Project, error) {
 	var projects []domain.Project
 	
+  log.Println("ProjectRepository.Find 1")
+  
 	globalContext := appengine.NewContext(repository.request)
-  c, _ := appengine.Namespace(globalContext, repository.namespace)
+  log.Println("ProjectRepository.Find 2")
+  c, errNamespace := appengine.Namespace(globalContext, repository.namespace)
+  if errNamespace != nil {
+    log.Println(errNamespace)
+    return projects, errNamespace
+  }
+  
+  log.Println("ProjectRepository.Find 3")
   q := datastore.NewQuery("Projects").Filter("Active =", active).Limit(1)
 	
+  
+  log.Println("ProjectRepository.Find 4")
+  
 	keys, err := q.GetAll(c, &projects)
-  if err != nil {
+  
+  log.Println("ProjectRepository.Find 5")
+  
+  if err != nil {    
+    log.Println("ProjectRepository.Find 6")
     return projects, err
-  } else {
+  } else {    
+    log.Println("ProjectRepository.Find 7")
     // loop through and add the keys as ID
     for i := 0; i < len(keys); i++ {
       projects[i].ID = keys[i].Encode()
     }
   }
+      
+    log.Println("ProjectRepository.Find 9")
   return projects, nil
 }
