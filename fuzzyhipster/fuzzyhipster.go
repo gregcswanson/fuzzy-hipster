@@ -28,19 +28,18 @@ func init() {
   
   // projects
   r.HandleFunc("/api/1/projects", useCaseMiddleware(ProjectsHandler)).Methods("GET")
-  r.HandleFunc("/api/1/projects/{id}", ListHandler).Methods("GET")
-  r.HandleFunc("/api/1/projects", CreateListHandler).Methods("POST")
+  r.HandleFunc("/api/1/projects/{id}", useCaseMiddleware(ProjectHandler)).Methods("GET")
+  r.HandleFunc("/api/1/projects", useCaseMiddleware(CreateProjectHandler)).Methods("POST")
   r.HandleFunc("/api/1/projects/{id}", UpdateListHandler).Methods("PUT")
   r.HandleFunc("/api/1/projects/{id}", DeleteListHandler).Methods("DELETE")
   
   // project lines
-  r.HandleFunc("/api/1/projectlines", CreateListHandler).Methods("POST")
-  r.HandleFunc("/api/1/projectlines/{id}", UpdateListHandler).Methods("PUT")
-  r.HandleFunc("/api/1/projectlines/{id}", DeleteListHandler).Methods("DELETE")
+  r.HandleFunc("/api/1/projects/{project_id}/lines",  useCaseMiddleware(CreateProjectLineHandler)).Methods("POST")
+  //r.HandleFunc("/api/1/projects/{project_id}/lines/{id}", DeleteListHandler).Methods("DELETE")
   
   
   // lists
-  r.HandleFunc("/api/1/lists", useCaseMiddleware(ListsHandler)).Methods("GET")
+  r.HandleFunc("/api/1/lists", ListsHandler).Methods("GET")
   r.HandleFunc("/api/1/lists/{id}", ListHandler).Methods("GET")
   r.HandleFunc("/api/1/lists", CreateListHandler).Methods("POST")
   r.HandleFunc("/api/1/lists/{id}", UpdateListHandler).Methods("PUT")

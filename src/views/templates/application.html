@@ -16,7 +16,9 @@
       </div>
       <div class="container">
         {{token}}        
+         {{#if isAuthenticated}}
         {{outlet}}
+        {{/if}}
       </div>
       <footer class='container'>
         <hr />

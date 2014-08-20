@@ -30,7 +30,8 @@ func (repository *ProjectRepository) Get(ID string)(domain.Project, error) {
 	}
   // retrieve the project
   	err = datastore.Get(c, key, &project);
-	
+	project.ID = ID
+  
   return project, err
 }
 
@@ -86,7 +87,7 @@ func (repository *ProjectRepository) Find(bookID string, active bool) ([]domain.
   }
   
   log.Println("ProjectRepository.Find 3")
-  q := datastore.NewQuery("Projects").Filter("Active =", active).Limit(1)
+  q := datastore.NewQuery("Projects").Filter("Active =", active)
 	
   
   log.Println("ProjectRepository.Find 4")

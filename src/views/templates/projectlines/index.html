@@ -1,0 +1,28 @@
+{{#each}}
+      <div class='row'>
+        <div class='col-xs-4'>
+          {{Status}}
+        </div>
+        <div class='col-xs-4'>
+          {{Text}}
+        </div>
+        <div class='col-xs-4'>
+            
+        </div>
+      </div>
+{{/each}}
+
+<div class='row'>
+  <div class='col-xs-4'>
+    {{view Ember.Select
+       content=statuses
+       value=newItemStatus
+    }}
+  </div>
+  <div class='col-xs-4'>
+     {{input valueBinding='newItemText' class='form-control'}}
+  </div>
+  <div class='col-xs-2'>
+    <button {{action 'addItem'}} class='btn btn-primary btn-block'>Add</button>
+  </div>
+</div>

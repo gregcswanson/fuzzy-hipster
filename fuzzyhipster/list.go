@@ -5,7 +5,7 @@ import (
     "net/http"
     "encoding/json"
     "strconv"
-    "src/usecases"
+    //"src/usecases"
 	  "github.com/gorilla/mux"
 )
 
@@ -105,7 +105,7 @@ func ListHandler(w http.ResponseWriter, r *http.Request) {
     w.Write(j)
 }
 
-func ListsHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors) {
+func ListsHandler(w http.ResponseWriter, r *http.Request) {
     if lists == nil {
       lists = []List{}
     }  
@@ -118,6 +118,8 @@ func ListsHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactor
 }
 
 func CreateListHandler(w http.ResponseWriter, r *http.Request) {
+  log.Println(r.Body)
+  
 	var listJSON ListJSON
 	err := json.NewDecoder(r.Body).Decode(&listJSON)
 	if err != nil {
@@ -144,6 +146,7 @@ func CreateListHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateListHandler(w http.ResponseWriter, r *http.Request) {
+  
 	// Grab the kitten's id from the incoming url
 	vars := mux.Vars(r)
 	id := vars["id"]

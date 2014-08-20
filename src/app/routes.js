@@ -8,6 +8,10 @@ App.Router.map(function() {
 	});
 	this.resource('projects', function() {
 		this.route('new');
-  	});
+  });
+  this.resource('project', { path: 'project/:project_id'}, function() {
+    //this.route("edit", { path: "/edit" });
+    this.route("delete");
+  });
 	this.route('about', { path: '/about' });
 });

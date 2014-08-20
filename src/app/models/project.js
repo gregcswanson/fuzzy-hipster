@@ -1,21 +1,60 @@
 App.Project = Ember.Object.extend({
-    title: ''
+    Title: ''
 });
 
 App.Project.reopenClass({
-	findAll: function() {
-      return $.ajax({
+  findAll: function() {
+       return Em.$.ajax({
               url: '/api/1/projects',
               type: 'GET',
               dataType: 'json',
-              success: function(response) { 
-                console.log(response);
-                //return response.projects.map(function (child) {
-                //  return App.Project.create(child.data);
-                //});
-              },
-              error: function() { alert('no'); },
               beforeSend: setHeader
-            });
-  	}
+       }).then(function(response) { 
+                console.log(response);
+                var d = response.projects.map(function (child) {
+                  return App.Project.create(child.data);
+                });
+                console.log(d);
+                return response.projects;
+              }
+            );
+  	},
+  find: function(id) {
+       return Em.$.ajax({
+              url: '/api/1/projects/' + id,
+              type: 'GET',
+              dataType: 'json',
+              beforeSend: setHeader
+       }).then(function(response) { 
+                console.log(response);
+                var d = App.Project.create(response.project);
+                console.log(d);
+                return response.project;
+              }
+            );
+  	},
+  save: function(project) {
+      var data =  JSON.stringify({ "project" : project });
+      return Em.$.ajax({
+        url: '/api/1/projects',
+        type: 'POST',
+        data: data,
+        dataType: 'json',
+        beforeSend: setHeader
+      }).fail(function( jqXHR, textStatus, errorThrown ){
+          alert(jqXHR.responseText); 
+      });
+  },
+  saveline: function(line) {
+      var data =  JSON.stringify({ "line" : line });
+      return Em.$.ajax({
+        url: '/api/1/projects/' + line.ProjectID + '/lines',
+        type: 'POST',
+        data: data,
+        dataType: 'json',
+        beforeSend: setHeader
+      }).fail(function( jqXHR, textStatus, errorThrown ){
+          alert(jqXHR.responseText); 
+      });
+  }
 });

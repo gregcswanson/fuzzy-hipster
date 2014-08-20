@@ -9,9 +9,9 @@
     <div class='row'>
       <div class='col-sm-12'>
         <div class='list-group'>
-          {{#each}}
-            <p>{{title}}</p>
-          {{/each}}
+          {{#each content}}
+          <p>{{#link-to 'project.index' this.ID class='btn'}}{{Title}}{{/link-to}}</p>
+            {{/each}}
         </div>
 	</div>
 </div>

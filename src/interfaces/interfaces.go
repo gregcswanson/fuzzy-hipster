@@ -13,6 +13,7 @@ type DomainContext struct {
   Lists     ListRepository
   User      UserRepository
   Projects  ProjectRepository
+  ProjectItems  ProjectItemRepository
 }
 
 func NewDomainContext(request *http.Request, namespace string) *DomainContext {
@@ -32,6 +33,11 @@ func NewDomainContext(request *http.Request, namespace string) *DomainContext {
   domainContext.Projects = ProjectRepository{}
 	domainContext.Projects.request = request
 	domainContext.Projects.namespace = namespace
+  
+  // setup the projects repository
+  domainContext.ProjectItems = ProjectItemRepository{}
+	domainContext.ProjectItems.request = request
+	domainContext.ProjectItems.namespace = namespace
   
 	return domainContext
 }
