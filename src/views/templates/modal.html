@@ -1,8 +1,17 @@
 {{#modal-dialog action="closeModal"}}
-
-      
-        <p>body {{Status}}  {{Text}}</p>
-<p>{{ProjectId}}</p>
-<button class="btn btn-danger" {{action 'refresh'}}>refresh</button>
-
+  <div class="modal-header">
+    <button type="button" class="close" {{action "closeModal"}} aria-hidden="true">&times;</button>
+    <h3>Edit Project Item</h3>
+  </div>
+  <div class="modal-body">
+    {{Text}}
+    {{input action='addItem' 
+        placeholder='start with / for note and . for item'  
+        valueBinding='' 
+        class='form-control'}}
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger" {{action 'refresh'}}>refresh</button>&nbsp;
+    <button class="btn" {{action "closeModal"}} aria-hidden="true">close</button>
+  </div>
 {{/modal-dialog}}

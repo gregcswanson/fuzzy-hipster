@@ -39,6 +39,9 @@ func (repository *ProjectRepository) Store(item domain.Project) (domain.Project,
 	// upsert operation
 	globalContext := appengine.NewContext(repository.request)
   c, _ := appengine.Namespace(globalContext, repository.namespace)
+  
+
+  
   if item.ID != "" {
 		// update
 		key , err := datastore.DecodeKey(item.ID)
@@ -76,37 +79,28 @@ func (repository *ProjectRepository) Delete(item domain.Project) error {
 func (repository *ProjectRepository) Find(bookID string, active bool) ([]domain.Project, error) {
 	var projects []domain.Project
 	
-  log.Println("ProjectRepository.Find 1")
   
 	globalContext := appengine.NewContext(repository.request)
-  log.Println("ProjectRepository.Find 2")
   c, errNamespace := appengine.Namespace(globalContext, repository.namespace)
   if errNamespace != nil {
     log.Println(errNamespace)
     return projects, errNamespace
   }
   
-  log.Println("ProjectRepository.Find 3")
-  q := datastore.NewQuery("Projects").Filter("Active =", active)
+  q := datastore.NewQuery("Projects").Filter("Active =", active).Order("Title")
 	
-  
-  log.Println("ProjectRepository.Find 4")
   
 	keys, err := q.GetAll(c, &projects)
   
-  log.Println("ProjectRepository.Find 5")
   
   if err != nil {    
-    log.Println("ProjectRepository.Find 6")
     return projects, err
   } else {    
-    log.Println("ProjectRepository.Find 7")
     // loop through and add the keys as ID
     for i := 0; i < len(keys); i++ {
       projects[i].ID = keys[i].Encode()
     }
   }
       
-    log.Println("ProjectRepository.Find 9")
   return projects, nil
 }

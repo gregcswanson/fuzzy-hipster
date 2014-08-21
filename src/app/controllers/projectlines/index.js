@@ -28,7 +28,7 @@ App.ProjectlinesIndexController = Ember.ArrayController.extend({
         console.log(data.line);
         controller.get('model').addObject(data.line);
         controller.set('newItemText', '');
-        controller.set('newItemStatus', 'NOTE');
+        controller.set('newItemStatus', 'OPEN');
       });
     },
     toggleStatus: function() {  

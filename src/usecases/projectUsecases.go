@@ -18,6 +18,7 @@ type ProjectLine struct {
 	ID string
   Status string // open, closed, note, cancelled, running
 	Text string
+  Sort int64
 }
 
 type ProjectInteractor struct {
@@ -85,7 +86,7 @@ func (interactor *ProjectInteractor) FindByID(id string) (Project, error) {
   var projectLines []ProjectLine
 	projectLines = make([]ProjectLine, len(lines))
 	for i, projectLine := range lines {
-		projectLines[i] = ProjectLine{projectLine.ID, projectLine.Status, projectLine.Text}
+		projectLines[i] = ProjectLine{projectLine.ID, projectLine.Status, projectLine.Text, projectLine.Sort}
 	}
   
 	// Copy to the use case model
@@ -115,11 +116,14 @@ func (interactor *ProjectInteractor) SaveItem(id string, line ProjectLine) (Proj
   }
 	entity.Status = line.Status
   entity.Text = line.Text
+  entity.Start = time.Now()
+  entity.End = time.Now()
   
 	// save
 	storedEntity, err := interactor.Context.ProjectItems.Store(entity)
 	if err == nil {
 		line.ID = storedEntity.ID
+    line.Sort = storedEntity.Sort
 	}
 	
 	return line, err

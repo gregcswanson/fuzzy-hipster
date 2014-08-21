@@ -1,4 +1,5 @@
 App.ModalController = Ember.ObjectController.extend({
+  title: 'Modal Test',
   actions: {
     close: function() {
       return this.send('closeModal');

@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"appengine"
 	"appengine/datastore"
+  "time"
 )
 
 type ProjectItemRepository BaseRepository
@@ -19,6 +20,12 @@ func (repository *ProjectItemRepository) Store(item domain.ProjectItem) (domain.
 	// upsert operation
 	globalContext := appengine.NewContext(repository.request)
   c, _ := appengine.Namespace(globalContext, repository.namespace)
+  
+    // Add default values
+  if item.Sort == 0 {
+    item.Sort = time.Now().Unix()
+  }
+  
   if item.ID != "" {
 		// update
 		key , err := datastore.DecodeKey(item.ID)
@@ -62,7 +69,7 @@ func (repository *ProjectItemRepository) Find(projectID string) ([]domain.Projec
     return projectItems, errNamespace
   }
   
-  q := datastore.NewQuery("ProjectItems").Filter("ProjectID =", projectID)
+  q := datastore.NewQuery("ProjectItems").Filter("ProjectID =", projectID).Order("Sort")
 	keys, err := q.GetAll(c, &projectItems)
   if err != nil {    
     return projectItems, err
