@@ -1,0 +1,25 @@
+<div class='row'>
+  {{#if isNote}}
+    <div class='col-xs-12'>
+      <div class='well well-sm' {{action 'openModal' 'modal' this}}>
+        <span><i>{{Text}}</i></span>
+      </div>
+    </div>    
+  {{else}}
+    <div class='col-xs-12'>
+            {{#if isOpen}}
+          <button class="btn" {{action 'toggleStatus'}}><span class="glyphicon glyphicon-unchecked"></span></button>
+            {{/if}}
+            {{#if isDone}}
+          <button class="btn" {{action 'toggleStatus'}}><span class="glyphicon glyphicon-check"></span></button>
+            {{/if}}
+            {{#if isDiscarded}}
+          <button class="btn" {{action 'toggleStatus'}}><span class="glyphicon glyphicon-ban-circle"></span></button>
+            {{/if}}
+    
+      <span {{action 'openModal' 'modal' this}}>
+        &nbsp;{{Text}}
+      </span>
+    </div>
+  {{/if}}
+</div>

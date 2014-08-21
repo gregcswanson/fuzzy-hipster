@@ -1,28 +1,26 @@
 {{#each}}
-      <div class='row'>
-        <div class='col-xs-4'>
-          {{Status}}
-        </div>
-        <div class='col-xs-4'>
-          {{Text}}
-        </div>
-        <div class='col-xs-4'>
-            <button {{action 'openModal' 'modal' this}}>Open</button>
-        </div>
-      </div>
+  {{render 'projectlines.item' this}}
 {{/each}}
-
+<hr />
 <div class='row'>
-  <div class='col-xs-4'>
-    {{view Ember.Select
-       content=statuses
-       value=newItemStatus
-    }}
-  </div>
-  <div class='col-xs-4'>
-     {{input valueBinding='newItemText' class='form-control'}}
-  </div>
-  <div class='col-xs-2'>
-    <button {{action 'addItem'}} class='btn btn-primary btn-block'>Add</button>
+  <div class='col-xs-12'>
+    <div class="input-group">
+      <span class="input-group-btn">
+        {{#if isOpen}}
+          <button class="btn btn-primary" {{action 'toggleStatus'}}>
+            <span class="glyphicon glyphicon-unchecked"></span>
+          </button>
+        {{/if}}
+        {{#if isNote}}
+          <button class="btn btn-primary" {{action 'toggleStatus'}}>
+            <span class="glyphicon glyphicon-pencil"></span>
+          </button>
+         {{/if}}
+      </span>
+      {{input action='addItem' 
+        placeholder='start with / for note and . for item'  
+        valueBinding='newItemText' 
+        class='form-control'}}
+    </div>
   </div>
 </div>

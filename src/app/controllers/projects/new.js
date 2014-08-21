@@ -1,4 +1,5 @@
 App.ProjectsNewController = Ember.ObjectController.extend({
+  
 	actions: {
     	createProject: function() { 
 			
