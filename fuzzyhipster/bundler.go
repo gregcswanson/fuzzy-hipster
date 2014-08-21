@@ -51,6 +51,22 @@ func bundle() (string) {
     }
   }
   
+  // add the component templates
+  components, _ := ioutil.ReadDir("src/views/components")
+  for _, component := range components {
+    if(!component.IsDir()) {
+      path := "src/views/components/" + component.Name()
+      t, _ := os.Open(path)
+      name := strings.Replace(component.Name(), ".html", "", -1)
+      io.WriteString(buf, "<script type='text/x-handlebars' data-template-name='components/")
+      io.WriteString(buf,  name)
+      io.WriteString(buf,  "'>")
+      io.Copy(buf, t) 
+      io.WriteString(buf,  "</script>")
+      t.Close()
+    } 
+  }
+  
   footer, _ := os.Open("src/views/footer.html")
   io.Copy(buf, footer)          
   footer.Close()
