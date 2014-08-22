@@ -16,6 +16,7 @@ type Project struct {
 
 type ProjectLine struct {
 	ID string
+  ProjectID string
   Status string // open, closed, note, cancelled, running
 	Text string
   Sort int64
@@ -86,7 +87,7 @@ func (interactor *ProjectInteractor) FindByID(id string) (Project, error) {
   var projectLines []ProjectLine
 	projectLines = make([]ProjectLine, len(lines))
 	for i, projectLine := range lines {
-		projectLines[i] = ProjectLine{projectLine.ID, projectLine.Status, projectLine.Text, projectLine.Sort}
+		projectLines[i] = ProjectLine{projectLine.ID, projectLine.ProjectID, projectLine.Status, projectLine.Text, projectLine.Sort}
 	}
   
 	// Copy to the use case model
@@ -108,16 +109,25 @@ func (interactor *ProjectInteractor) SaveItem(id string, line ProjectLine) (Proj
   // either save or create
 	entity := domain.ProjectItem{}
   if line.ID != "" {
+    log.Println("Update Item")
     // get the current entity
-    entity, _ = interactor.Context.ProjectItems.Get(line.ID)
+    foundEntity, errGet := interactor.Context.ProjectItems.Get(line.ID)
+    if errGet != nil {  
+      log.Println(errGet)
+      return ProjectLine{}, errGet
+    }
+    entity = foundEntity
   } else {
+    log.Println("Save Item")
     // setup the new record
     entity.ProjectID = id
+    entity.Start = time.Now()
+    entity.End = time.Now()
   }
 	entity.Status = line.Status
   entity.Text = line.Text
-  entity.Start = time.Now()
-  entity.End = time.Now()
+  
+  log.Println(entity.ID)
   
 	// save
 	storedEntity, err := interactor.Context.ProjectItems.Store(entity)
@@ -129,6 +139,17 @@ func (interactor *ProjectInteractor) SaveItem(id string, line ProjectLine) (Proj
 	return line, err
 }
 
+func (interactor *ProjectInteractor) DeleteItem(id string) (error) {
+    
+    foundEntity, err := interactor.Context.ProjectItems.Get(id)
+    if err != nil {  
+      log.Println(err)
+      return err
+    }
+  
+    err = interactor.Context.ProjectItems.Delete(foundEntity)
+  return err
+}
 
 func (interactor *ProjectInteractor) Delete(id string) (error) {
   // get the project

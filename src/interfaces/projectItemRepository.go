@@ -6,6 +6,7 @@ import (
 	"appengine"
 	"appengine/datastore"
   "time"
+  "log"
 )
 
 type ProjectItemRepository BaseRepository
@@ -27,16 +28,20 @@ func (repository *ProjectItemRepository) Store(item domain.ProjectItem) (domain.
   }
   
   if item.ID != "" {
+    log.Println("Update Record")
+    log.Println(item.ID)
 		// update
 		key , err := datastore.DecodeKey(item.ID)
 		if err != nil {
 			return item, err
 		}
+    log.Println(key)
 		_, err = datastore.Put(c, key, &item)
     	if err != nil {
 			return item, err
 		}
 	} else {
+    log.Println("Create Record")
 		// new
 		key, err := datastore.Put(c, datastore.NewIncompleteKey(c, "ProjectItems", nil), &item)
     	if err != nil {
@@ -69,7 +74,7 @@ func (repository *ProjectItemRepository) Find(projectID string) ([]domain.Projec
     return projectItems, errNamespace
   }
   
-  q := datastore.NewQuery("ProjectItems").Filter("ProjectID =", projectID).Order("Sort")
+  q := datastore.NewQuery("ProjectItems").Filter("ProjectID =", projectID)//.Order("Sort")
 	keys, err := q.GetAll(c, &projectItems)
   if err != nil {    
     return projectItems, err
@@ -95,7 +100,8 @@ func (repository *ProjectItemRepository) Get(id string)(domain.ProjectItem, erro
 	  return projectItem, err
 	}
   // retrieve the project
-  	err = datastore.Get(c, key, &projectItem);
+  err = datastore.Get(c, key, &projectItem);
+  projectItem.ID = id
 	
   return projectItem, err
 }

@@ -14,10 +14,10 @@ type ProjectItemRepository interface {
 type ProjectItem struct {
 	ID string `datastore:"-"`
   ProjectID string
-	Status string
+	Status string 
   Text string
   Sort int64
-  Duration int // future enhancement to track time spent
-  Start time.Time // future enhancement to track time spent
-  End time.Time // future enhancement to track time spent
+  Duration int `datastore:",noindex"` // future enhancement to track time spent
+  Start time.Time `datastore:",noindex"` // future enhancement to track time spent
+  End time.Time `datastore:",noindex"` // future enhancement to track time spent
 }

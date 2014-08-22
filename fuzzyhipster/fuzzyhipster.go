@@ -30,11 +30,13 @@ func init() {
   r.HandleFunc("/api/1/projects", useCaseMiddleware(ProjectsHandler)).Methods("GET")
   r.HandleFunc("/api/1/projects/{id}", useCaseMiddleware(ProjectHandler)).Methods("GET")
   r.HandleFunc("/api/1/projects", useCaseMiddleware(CreateProjectHandler)).Methods("POST")
-  r.HandleFunc("/api/1/projects/{id}", UpdateListHandler).Methods("PUT")
+  //r.HandleFunc("/api/1/projects/{id}", useCaseMiddleware(UpdateProjectHandler)).Methods("PUT")
   r.HandleFunc("/api/1/projects/{id}", DeleteListHandler).Methods("DELETE")
   
   // project lines
   r.HandleFunc("/api/1/projects/{project_id}/lines",  useCaseMiddleware(CreateProjectLineHandler)).Methods("POST")
+  r.HandleFunc("/api/1/projects/{project_id}/lines/{id}",  useCaseMiddleware(UpdateProjectLineHandler)).Methods("PUT")
+  r.HandleFunc("/api/1/projects/{project_id}/lines/{id}", useCaseMiddleware(DeleteProjectLineHandler)).Methods("DELETE")
   //r.HandleFunc("/api/1/projects/{project_id}/lines/{id}", DeleteListHandler).Methods("DELETE")
   
   

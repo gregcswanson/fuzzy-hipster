@@ -8,6 +8,7 @@ import (
     "src/usecases"
   "fmt"
 	"github.com/gorilla/mux"
+  "errors"
 )
 
 type ProjectJSON struct {
@@ -119,6 +120,89 @@ func CreateProjectLineHandler(w http.ResponseWriter, r *http.Request, u *usecase
   
 	// Serialize the modified project to JSON
 	j, err := json.Marshal(ProjectLineJSON{ProjectLine: createdLine})
+	if err != nil {
+		panic(err)
+	}
+  
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(j)
+}
+
+func UpdateProjectLineHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors) {
+	var projectLineJSON ProjectLineJSON
+  
+  log.Println("UpdateProjectLineHandler")
+  
+  vars := mux.Vars(r)
+  projectId := vars["project_id"]
+  id := vars["id"]
+  
+	err := json.NewDecoder(r.Body).Decode(&projectLineJSON)
+	if err != nil {
+    w.WriteHeader(http.StatusInternalServerError)
+    fmt.Fprint(w, err)
+    return
+	}
+  
+	projectLine := projectLineJSON.ProjectLine
+  
+  if projectLine.ID != id {
+    err := errors.New("Fail")
+    w.WriteHeader(http.StatusInternalServerError)
+    fmt.Fprint(w, err)
+    return
+  }
+    
+  updatedLine, err := u.Projects.SaveItem(projectId, projectLine)
+  if err != nil {
+    w.WriteHeader(http.StatusInternalServerError)
+    fmt.Fprint(w, err)
+    return
+  }
+    
+	// Serialize the modified project to JSON
+	j, err := json.Marshal(ProjectLineJSON{ProjectLine: updatedLine})
+	if err != nil {
+		panic(err)
+	}
+  
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(j)
+}
+
+func DeleteProjectLineHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors) {
+	var projectLineJSON ProjectLineJSON
+  
+  log.Println("DeleteProjectLineHandler")
+  
+  vars := mux.Vars(r)
+  id := vars["id"]
+  
+	err := json.NewDecoder(r.Body).Decode(&projectLineJSON)
+	if err != nil {
+    w.WriteHeader(http.StatusInternalServerError)
+    fmt.Fprint(w, err)
+    return
+	}
+  
+	projectLine := projectLineJSON.ProjectLine
+  
+  if projectLine.ID != id {
+    err := errors.New("Fail")
+    w.WriteHeader(http.StatusInternalServerError)
+    fmt.Fprint(w, err)
+    return
+  }
+    
+  err = u.Projects.DeleteItem(projectLine.ID)
+  if err != nil {
+    w.WriteHeader(http.StatusInternalServerError)
+    fmt.Fprint(w, err)
+    return
+  }
+    
+	// Serialize the original project item to JSON and return it
+	j, err := json.Marshal(ProjectLineJSON{ProjectLine: projectLine})
 	if err != nil {
 		panic(err)
 	}

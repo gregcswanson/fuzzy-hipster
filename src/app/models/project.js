@@ -56,5 +56,29 @@ App.Project.reopenClass({
       }).fail(function( jqXHR, textStatus, errorThrown ){
           alert(jqXHR.responseText); 
       });
+  },
+  updateline: function(line) {
+      var data =  JSON.stringify({ "line" : line });
+      return Em.$.ajax({
+        url: '/api/1/projects/' + line.ProjectID + '/lines/' + line.ID,
+        type: 'PUT',
+        data: data,
+        dataType: 'json',
+        beforeSend: setHeader
+      }).fail(function( jqXHR, textStatus, errorThrown ){
+          alert(jqXHR.responseText); 
+      });
+  },
+  deleteline: function(line) {
+      var data =  JSON.stringify({ "line" : line });
+      return Em.$.ajax({
+        url: '/api/1/projects/' + line.ProjectID + '/lines/' + line.ID,
+        type: 'DELETE',
+        data: data,
+        dataType: 'json',
+        beforeSend: setHeader
+      }).fail(function( jqXHR, textStatus, errorThrown ){
+          alert(jqXHR.responseText); 
+      });
   }
 });

@@ -15,9 +15,9 @@ type Project struct {
 	ID string `datastore:"-"`
   BookID string
 	Title string
-  Count int
-  Open int
+  Count int `datastore:",noindex"`
+  Open int  `datastore:",noindex"`
   Active bool
-  Start time.Time
-  End time.Time
+  Start time.Time `datastore:",noindex"`
+  End time.Time `datastore:",noindex"`
 }
