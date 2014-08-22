@@ -1,0 +1,20 @@
+{{#modal-dialog action="closeModal"}}
+  <div class="modal-header">
+    <button type="button" class="close" {{action "closeModal"}} aria-hidden="true">&times;</button>
+    <h3>Project</h3>
+  </div>
+  <div class="modal-body">  
+     <div class="row">
+      <div class="col-xs-12">
+        {{input action='addItem' 
+            valueBinding='newTitle' 
+            class='form-control'}}
+      </div>
+    </div>
+    
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-success" {{action 'save'}}>save</button>&nbsp;
+    <button class="btn" {{action "closeModal"}} aria-hidden="true">close</button>
+  </div>
+{{/modal-dialog}}

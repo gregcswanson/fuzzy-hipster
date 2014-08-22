@@ -40,8 +40,6 @@ func (repository *ProjectRepository) Store(item domain.Project) (domain.Project,
 	globalContext := appengine.NewContext(repository.request)
   c, _ := appengine.Namespace(globalContext, repository.namespace)
   
-
-  
   if item.ID != "" {
 		// update
 		key , err := datastore.DecodeKey(item.ID)

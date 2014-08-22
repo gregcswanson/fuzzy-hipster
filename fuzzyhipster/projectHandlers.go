@@ -95,6 +95,48 @@ func CreateProjectHandler(w http.ResponseWriter, r *http.Request, u *usecases.In
 	w.Write(j)
 }
 
+func UpdateProjectHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors) {
+	var projectJSON ProjectJSON
+  
+  log.Println("UpdateProjectHandler")
+  
+  vars := mux.Vars(r)
+  id := vars["id"]
+  
+	err := json.NewDecoder(r.Body).Decode(&projectJSON)
+	if err != nil {
+    w.WriteHeader(http.StatusInternalServerError)
+    fmt.Fprint(w, err)
+    return
+	}
+  
+	project := projectJSON.Project
+  
+  if project.ID != id {
+    err := errors.New("Fail")
+    w.WriteHeader(http.StatusInternalServerError)
+    fmt.Fprint(w, err)
+    return
+  }
+    
+  updatedProject, err := u.Projects.Save(project)
+  if err != nil {
+    w.WriteHeader(http.StatusInternalServerError)
+    fmt.Fprint(w, err)
+    return
+  }
+    
+	// Serialize the modified project to JSON
+	j, err := json.Marshal(ProjectJSON{Project: updatedProject})
+	if err != nil {
+		panic(err)
+	}
+  
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(j)
+}
+
+
 func CreateProjectLineHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors) {
 	var projectLineJSON ProjectLineJSON
   

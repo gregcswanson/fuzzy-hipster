@@ -7,6 +7,18 @@ App.ModalController = Ember.ObjectController.extend({
     this.set('newStatus', this.get('model.Status'));
 
   }.observes('model'),
+  isNote: function() {
+    return this.get('newStatus') == 'NOTE';
+  }.property('newStatus')
+  , isOpen: function() {
+    return this.get('newStatus') == 'OPEN';
+  }.property('newStatus')
+  , isDone: function() {
+    return this.get('newStatus') == 'DONE';
+  }.property('newStatus')
+  , isDiscarded: function() {
+    return this.get('newStatus') == 'DISCARDED';
+  }.property('newStatus'),
   actions: {
     close: function() {
       return this.send('closeModal');
@@ -32,6 +44,18 @@ App.ModalController = Ember.ObjectController.extend({
         controller.send('closeModal');
         controller.send("itemsChanged");
       });
-    }
+    },
+    setDone: function() {  
+        this.set('newStatus', 'DONE');
+    },
+    setOpen: function() {  
+        this.set('newStatus', 'OPEN');
+    },
+    setNote: function() {  
+        this.set('newStatus', 'NOTE');
+    },
+    setDiscarded: function() {  
+        this.set('newStatus', 'DISCARDED');
+    }                                            
   }
 });

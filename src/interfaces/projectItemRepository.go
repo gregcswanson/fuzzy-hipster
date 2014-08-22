@@ -74,7 +74,7 @@ func (repository *ProjectItemRepository) Find(projectID string) ([]domain.Projec
     return projectItems, errNamespace
   }
   
-  q := datastore.NewQuery("ProjectItems").Filter("ProjectID =", projectID)//.Order("Sort")
+  q := datastore.NewQuery("ProjectItems").Filter("ProjectID =", projectID).Order("Sort")
 	keys, err := q.GetAll(c, &projectItems)
   if err != nil {    
     return projectItems, err

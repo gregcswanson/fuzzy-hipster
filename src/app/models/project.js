@@ -45,6 +45,18 @@ App.Project.reopenClass({
           alert(jqXHR.responseText); 
       });
   },
+  update: function(project) {
+      var data =  JSON.stringify({ "project" : project });
+      return Em.$.ajax({
+        url: '/api/1/projects/' + project.ID,
+        type: 'PUT',
+        data: data,
+        dataType: 'json',
+        beforeSend: setHeader
+      }).fail(function( jqXHR, textStatus, errorThrown ){
+          alert(jqXHR.responseText); 
+      });
+  },
   saveline: function(line) {
       var data =  JSON.stringify({ "line" : line });
       return Em.$.ajax({
