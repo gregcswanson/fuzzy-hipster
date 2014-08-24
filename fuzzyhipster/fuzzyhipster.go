@@ -37,8 +37,13 @@ func init() {
   r.HandleFunc("/api/1/projects/{project_id}/lines",  useCaseMiddleware(CreateProjectLineHandler)).Methods("POST")
   r.HandleFunc("/api/1/projects/{project_id}/lines/{id}",  useCaseMiddleware(UpdateProjectLineHandler)).Methods("PUT")
   r.HandleFunc("/api/1/projects/{project_id}/lines/{id}", useCaseMiddleware(DeleteProjectLineHandler)).Methods("DELETE")
-  //r.HandleFunc("/api/1/projects/{project_id}/lines/{id}", DeleteListHandler).Methods("DELETE")
   
+  // day items
+  r.HandleFunc("/api/1/day/{day_id}", useCaseMiddleware(DayHandler)).Methods("GET")
+  //r.HandleFunc("/api/1/dayitem/{id}", useCaseMiddleware(ProjectHandler)).Methods("GET")
+  //r.HandleFunc("/api/1/dayitem", useCaseMiddleware(CreateProjectHandler)).Methods("POST")
+  //r.HandleFunc("/api/1/dayitem/{id}", useCaseMiddleware(UpdateProjectHandler)).Methods("PUT")
+  //r.HandleFunc("/api/1/dayitem/{id}", DeleteListHandler).Methods("DELETE")
   
   // lists
   r.HandleFunc("/api/1/lists", ListsHandler).Methods("GET")
@@ -48,8 +53,8 @@ func init() {
   r.HandleFunc("/api/1/lists/{id}", DeleteListHandler).Methods("DELETE")
   
   // items
-    r.HandleFunc("/api/1/items", ItemsHandler).Methods("GET")
-    r.HandleFunc("/api/1/items/{id}", ItemHandler).Methods("GET")
+  r.HandleFunc("/api/1/items", ItemsHandler).Methods("GET")
+  r.HandleFunc("/api/1/items/{id}", ItemHandler).Methods("GET")
   
   
   r.HandleFunc("/app", handlerBundleApp).Methods("GET")

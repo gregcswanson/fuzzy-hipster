@@ -7,9 +7,10 @@ import (
 )
 
 type Interactors struct {
-  Projects ProjectInteractor
-  Lists ListInteractor 
-  User  UserInteractor
+  Projects    ProjectInteractor
+  Lists       ListInteractor 
+  User        UserInteractor
+  DayItems    DayItemInteractor
 }
 
 type ListInteractor struct {
@@ -32,6 +33,9 @@ func NewInteractors(request *http.Request, namespace string) *Interactors {
   
   interactors.Projects = ProjectInteractor{}
   interactors.Projects.Context = *context
+  
+  interactors.DayItems = DayItemInteractor{}
+  interactors.DayItems.Context = *context
   
 	return interactors
 }
