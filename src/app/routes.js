@@ -2,7 +2,9 @@ App.Router.map(function() {
 	this.resource('lists', function() {
     	this.route('new');
 	});
-  this.route('day', {path: 'day/:day_id'});
+  this.resource('day', {path: 'day/:day_id'}, function() {
+    
+  });
 	this.resource('list', { path: 'list/:list_id' }, function() {
     	this.route("edit", { path: "/edit" });
 		this.route("delete");

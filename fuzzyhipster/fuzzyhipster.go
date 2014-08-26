@@ -41,7 +41,7 @@ func init() {
   // day items
   r.HandleFunc("/api/1/day/{day_id}", useCaseMiddleware(DayHandler)).Methods("GET")
   //r.HandleFunc("/api/1/dayitem/{id}", useCaseMiddleware(ProjectHandler)).Methods("GET")
-  //r.HandleFunc("/api/1/dayitem", useCaseMiddleware(CreateProjectHandler)).Methods("POST")
+  r.HandleFunc("/api/1/dayitem", useCaseMiddleware(CreateDayItemHandler)).Methods("POST")
   //r.HandleFunc("/api/1/dayitem/{id}", useCaseMiddleware(UpdateProjectHandler)).Methods("PUT")
   //r.HandleFunc("/api/1/dayitem/{id}", DeleteListHandler).Methods("DELETE")
   

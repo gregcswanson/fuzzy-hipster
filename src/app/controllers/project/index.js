@@ -1,4 +1,5 @@
 App.ProjectIndexController = Ember.ObjectController.extend({
+  
   statuses: ["NOTE", "OPEN", "DONE"],
   actions: {
     save: function() { 

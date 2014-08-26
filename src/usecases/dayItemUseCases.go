@@ -26,13 +26,16 @@ type DayItemInteractor struct {
 func (interactor *DayItemInteractor) FindByDay(dayAsInt int) ([]DayItem, error) {
 	// get the items on the day
   log.Println("usecases.DayItemInteractor.Find")
-  foundDayItems, _ := interactor.Context.DayItems.Find(dayAsInt)
+  foundDayItems, findError := interactor.Context.DayItems.Find(dayAsInt)
+  if findError != nil {
+    log.Println(findError)
+    return []DayItem{}, findError
+  }
 	// Copy to the use case model
   var dayItems []DayItem
 	dayItems = make([]DayItem, len(foundDayItems))
-	for i, dayItem := range dayItems {
-    dayItems := make([]DayItem, 0)
-		dayItems[i] = DayItem{dayItem.ID, dayItem.Day, dayItem.ProjectID,  dayItem.ProjectItemID, "", dayItem.Status, dayItem.Text, dayItem.Sort}
+	for i, dayItem := range foundDayItems {
+    dayItems[i] = DayItem{dayItem.ID, dayItem.Day, dayItem.ProjectID,  dayItem.ProjectItemID, "", dayItem.Status, dayItem.Text, dayItem.Sort}
 	}
 	return dayItems, nil
 }
@@ -51,6 +54,7 @@ func (interactor *DayItemInteractor) Save(dayItem DayItem) (DayItem, error) {
     entity, _ = interactor.Context.DayItems.Get(dayItem.ID)
   } else {
     // setup the new record
+    entity.Day = dayItem.Day
     entity.ProjectID = dayItem.ProjectID
     entity.ProjectItemID = dayItem.ProjectItemID
     entity.Start = time.Now()

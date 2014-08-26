@@ -24,21 +24,24 @@ func DayHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors)
   log.Println("DayHandler.FindActive")
   
   vars := mux.Vars(r)
-  id := vars["id"]
+  id := vars["day_id"]
   
   // convert to int
   dayItemAsInt, errConversion := strconv.Atoi(id)
   if errConversion != nil {
     w.WriteHeader(http.StatusInternalServerError)
+    log.Println(errConversion)
     fmt.Fprint(w, "Day is invalid")
     return
   }
+  log.Println(dayItemAsInt)
   
   dayItems, err1 := u.DayItems.FindByDay(dayItemAsInt)
   if err1 != nil {
     log.Println(err1)
   }
   if dayItems == nil {
+    log.Println("day items is nil")
       dayItems = []usecases.DayItem{}
   } 
   j, err := json.Marshal(DayItemsJSON{DayItems: dayItems})

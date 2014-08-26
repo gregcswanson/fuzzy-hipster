@@ -21,7 +21,11 @@ App.ProjectlinesIndexController = Ember.ArrayController.extend({
   }.property('newItemStatus'),
   actions: {
     addItem: function() {
-      var newItem = { Status: this.get('newItemStatus'), Text: this.get('newItemText'), ProjectID:  this.parentController.get('ID')};
+      var newItem = { 
+        Status: this.get('newItemStatus'), 
+        Text: this.get('newItemText'), 
+        ProjectID:  this.parentController.get('ID')
+      };
       // check for blank - disable save button
       var controller = this;
       App.Project.saveline(newItem).then( function(data){
