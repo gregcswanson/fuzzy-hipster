@@ -6,7 +6,7 @@ import (
     "encoding/json"
     "strconv"
     //"src/usecases"
-	  "github.com/gorilla/mux"
+	  "/vendor/github.com/gorilla/mux"
 )
 
 type List struct {

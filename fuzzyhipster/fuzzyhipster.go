@@ -8,8 +8,8 @@ import (
   "log"
   "errors"
   "encoding/json"
-  "github.com/gorilla/mux"
-  "github.com/dgrijalva/jwt-go"
+  "vendor/github.com/gorilla/mux"
+  "vender/github.com/dgrijalva/jwt-go"
 )
 
 type TokenResponseJSON struct {
