@@ -2,6 +2,10 @@ App.Router.map(function() {
 	this.resource('lists', function() {
     	this.route('new');
 	});
+  this.resource('days', function(){
+    this.route("day", { path: "/day/:day_id" });
+		this.route("today");
+  });
   this.resource('day', {path: 'day/:day_id'}, function() {
     
   });
