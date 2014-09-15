@@ -1,0 +1,33 @@
+{{define "index"}}
+{{template "header" .}}
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<h2 class="text-center">{{.Model.DateDisplay}}</h2>
+			{{range .Model.DayItems}}
+				{{if eq .Status "NOTE"}}
+    				<div class='col-md-offset-3 col-md-6'>
+      					<div class='well well-sm'>
+        					<span><i>{{.Text}}</i></span>
+      					</div>
+    				</div>
+    			{{else}}
+    				<div class='col-md-offset-3 col-md-6'>
+    					{{if eq .Status "OPEN"}}
+    						<a href="/day/date/id/done" class="btn"><span class="glyphicon glyphicon-unchecked"></span></a>
+    					{{else if eq .Status "DONE"}}
+    						<a href="/day/date/id/disguard" class="btn"><span class="glyphicon glyphicon-checked"></span></a>
+    					{{else if eq .Status "CANCELLED"}}
+    						<a href="/day/date/id/disguard" class="btn"><span class="glyphicon glyphicon-ban-circle"></span></a>
+    					{{end}}
+      					<span>
+        					&nbsp;{{.Text}}
+      					</span>
+    				</div>
+    				{{end}}
+			{{end}}
+		</div>
+	</div>
+</div>
+{{template "footer" .}}
+{{end}}

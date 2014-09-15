@@ -1,0 +1,18 @@
+{{define "projectadd"}}
+{{template "header" .}}
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<h2 class="text-center">Add Project</h2>
+			<form method="POST">
+				<div class="form-group">
+					<label class="form-label">Title</label>
+					<input type="text" name="Title" id="Title" value="{{.Model.Title}}" class="form-control" />
+				</div>
+				<button type="submit" class="btn btn-default">Submit</button>
+      		</form>
+		</div>
+	</div>
+</div>
+{{template "footer" .}}
+{{end}}

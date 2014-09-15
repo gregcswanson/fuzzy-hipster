@@ -1,0 +1,16 @@
+{{define "projects"}}
+{{template "header" .}}
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<h2 class="text-center">Projects <a href="/project/add" class="btn btn-sm btn-primary pull-right">Add</a></h2>
+			<div class='list-group'>
+          		{{range .Model}}
+					<p><a href="/project/{{.ID}}">{{.Title}}</a></p>
+				{{end}}
+			</div>
+		</div>
+	</div>
+</div>
+{{template "footer" .}}
+{{end}}

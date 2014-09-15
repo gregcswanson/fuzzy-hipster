@@ -44,8 +44,6 @@ func useCaseMiddleware(handler UseCaseHandler) http.HandlerFunc {
    return func(w http.ResponseWriter, r *http.Request) {
       // check the request header for the token
       authority := r.Header.Get("Authorization-Token")
-      
-      // read the authorisation token
       if authority == "" {
         w.WriteHeader(http.StatusUnauthorized)
         return
@@ -55,6 +53,31 @@ func useCaseMiddleware(handler UseCaseHandler) http.HandlerFunc {
       // create the use case service
       useCases := usecases.NewInteractors(r, namespance)
       handler(w, r, useCases)
+    }
+}
+
+func useCaseRequest(handler UseCaseHandler) http.HandlerFunc {
+   return func(w http.ResponseWriter, r *http.Request) {
+      	// check the user is logged in
+      	useCases := usecases.NewInteractors(r, "")
+        if !useCases.User.IsLoggedIn() {
+  	      url, err := useCases.User.LoginUrl()
+          if err != nil {
+            http.Error(w, err.Error(), http.StatusInternalServerError)
+            return
+          }
+          w.Header().Set("Location", url)
+          w.WriteHeader(http.StatusFound)
+          return
+        } else {
+        	user := useCases.User.Current()
+          	namespace := user.Id
+      		// create the use case service
+      		u := usecases.NewInteractors(r, namespace)
+      		handler(w, r, u)
+        }
+      	
+     
     }
 }
 

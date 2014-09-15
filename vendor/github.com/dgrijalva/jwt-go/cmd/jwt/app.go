@@ -15,7 +15,7 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/dgrijalva/jwt-go"
+	"vendor/github.com/dgrijalva/jwt-go"
 )
 
 var (

@@ -9,7 +9,7 @@ import (
   "errors"
   "encoding/json"
   "vendor/github.com/gorilla/mux"
-  "vender/github.com/dgrijalva/jwt-go"
+  "vendor/github.com/dgrijalva/jwt-go"
 )
 
 type TokenResponseJSON struct {
@@ -56,7 +56,11 @@ func init() {
   r.HandleFunc("/api/1/items", ItemsHandler).Methods("GET")
   r.HandleFunc("/api/1/items/{id}", ItemHandler).Methods("GET")
   
-  
+  r.HandleFunc("/index", useCaseRequest(indexHander)).Methods("GET")
+  r.HandleFunc("/projects", useCaseRequest(projectslistHandler)).Methods("GET")
+  r.HandleFunc("/project/add", useCaseRequest(projectAddHandler)).Methods("GET")
+  r.HandleFunc("/project/add", useCaseRequest(projectAddPostHandler)).Methods("POST")
+  r.HandleFunc("/about", useCaseRequest(aboutHander)).Methods("GET")
   r.HandleFunc("/app", handlerBundleApp).Methods("GET")
   r.HandleFunc("/logout", logout).Methods("GET")
   r.HandleFunc("/", authenticate(handlerBundle)).Methods("GET")
@@ -66,6 +70,13 @@ func init() {
   
   InitList()
 }
+
+
+
+func aboutHander(w http.ResponseWriter, r *http.Request, u *usecases.Interactors) {  
+	render(w, "about", &Page{Title: "About", IsAboutView: true})
+}
+
 
 func handlerBundle(w http.ResponseWriter, r *http.Request) {
   htmlPage := bundle()
