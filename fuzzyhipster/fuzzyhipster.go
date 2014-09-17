@@ -60,6 +60,8 @@ func init() {
   r.HandleFunc("/projects", useCaseRequest(projectslistHandler)).Methods("GET")
   r.HandleFunc("/project/add", useCaseRequest(projectAddHandler)).Methods("GET")
   r.HandleFunc("/project/add", useCaseRequest(projectAddPostHandler)).Methods("POST")
+  r.HandleFunc("/project/{id}", useCaseRequest(projectHandler)).Methods("GET")
+  
   r.HandleFunc("/about", useCaseRequest(aboutHander)).Methods("GET")
   r.HandleFunc("/app", handlerBundleApp).Methods("GET")
   r.HandleFunc("/logout", logout).Methods("GET")

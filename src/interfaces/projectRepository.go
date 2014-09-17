@@ -40,25 +40,34 @@ func (repository *ProjectRepository) Store(item domain.Project) (domain.Project,
 	globalContext := appengine.NewContext(repository.request)
   c, _ := appengine.Namespace(globalContext, repository.namespace)
   
-  if item.ID != "" {
+  err := datastore.RunInTransaction(c, func(c appengine.Context) error {
+        
+        if item.ID != "" {
 		// update
 		key , err := datastore.DecodeKey(item.ID)
 		if err != nil {
-			return item, err
+			return err
 		}
 		_, err = datastore.Put(c, key, &item)
     	if err != nil {
-			return item, err
+			return err
 		}
 	} else {
 		// new
 		key, err := datastore.Put(c, datastore.NewIncompleteKey(c, "Projects", nil), &item)
     	if err != nil {
-        	return item, err
+        	return err
     	} else {
     		item.ID = key.Encode()
     	}
 	}
+        
+        return nil
+    }, nil)
+    if err != nil {
+        return item, err
+    }
+  
 	return item, nil
 }
 

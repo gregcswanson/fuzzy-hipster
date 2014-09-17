@@ -3,7 +3,11 @@
 <div class="container">
 	<div class="row">
 		<div class="col-xs-12">
-			<h2 class="text-center">Add Project</h2>
+			{{if .Model.Title}}
+			<h2 class="text-center">Project</h2>
+			{{else}}
+			<h2 class='text-center'>New Project</h2>
+			{{end}}
 			<form method="POST">
 				<div class="form-group">
 					<label class="form-label">Title</label>
