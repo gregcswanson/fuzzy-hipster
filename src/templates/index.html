@@ -28,6 +28,34 @@
 			{{end}}
 		</div>
 	</div>
+  <hr />
+  <form method="POST">
+    <div class='row'>
+      <div class='col-md-offset-3 col-md-6'>
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button class="btn btn-primary">
+              <span class="glyphicon glyphicon-unchecked"></span>
+              <span class="glyphicon glyphicon-pencil" style="display:none;"></span>
+            </button> 
+            <input type="hidden" id="newType" name="newType" value="OPEN" />
+        </span>      
+        <input 
+            placeholder='start with / for note and . for item'  
+            name='newItemText' id='newItemText'
+            class='form-control'>
+        </div>
+      </div>
+    </div>
+  </form>
+  <hr />
+  <div class='row'>
+    <div class='well'>
+      <h4>To Do</h4>
+      <ol>
+        <li>Progressive Enhancement: Click to update type, check on change of text</li>
+      </ol>
+  </div>
 </div>
 {{template "footer" .}}
 {{end}}
