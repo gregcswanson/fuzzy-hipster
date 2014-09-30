@@ -13,6 +13,7 @@ var templates = template.Must(template.ParseFiles(
 	"src/templates/index.html", 
 	"src/templates/projects.html",
 	"src/templates/project/add.html",
+    "src/templates/project/index.html",
 	"src/templates/about.html")).Funcs(template.FuncMap(map[string]interface{}{"eq": eq}))
  
 //A Page structure

@@ -13,6 +13,11 @@ import (
   //"vendor/github.com/dgrijalva/jwt-go"
 )
 
+type ProjectViewModel struct {
+  Project usecases.Project
+  Items []usecases.ProjectLine
+}
+
 func projectslistHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors) {  
 	log.Println("projects:get")
 	projects, err1 := u.Projects.FindActive()
@@ -35,7 +40,8 @@ func projectHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interact
     	http.Redirect(w, r, "/projects", http.StatusFound)
     	return
   	}
-  	render(w, "projectadd", &Page{Title: "Project", IsProjectView: true, Model: project })
+    viewModel := &ProjectViewModel{Project: project}
+  	render(w, "project", &Page{Title: "Project", IsProjectView: true, Model: viewModel })
 }
 
 func projectAddHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors) {  
@@ -63,4 +69,8 @@ func projectAddPostHandler(w http.ResponseWriter, r *http.Request, u *usecases.I
   		return
   	}
   	http.Redirect(w, r, "/project/" + createdProject.ID, http.StatusFound)
+}
+
+func projectPostHandler() {
+
 }
