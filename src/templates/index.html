@@ -14,11 +14,11 @@
     			{{else}}
     				<div class='col-md-offset-3 col-md-6'>
     					{{if eq .Status "OPEN"}}
-    						<a href="/day/date/id/done" class="btn"><span class="glyphicon glyphicon-unchecked"></span></a>
+    						<a href="/day/date/{{.ID}}/done" class="btn"><span class="glyphicon glyphicon-unchecked"></span></a>
     					{{else if eq .Status "DONE"}}
-    						<a href="/day/date/id/disguard" class="btn"><span class="glyphicon glyphicon-checked"></span></a>
+    						<a href="/day/date/{{.ID}}/cancel" class="btn"><span class="glyphicon glyphicon-checked"></span></a>
     					{{else if eq .Status "CANCELLED"}}
-    						<a href="/day/date/id/disguard" class="btn"><span class="glyphicon glyphicon-ban-circle"></span></a>
+    						<a href="/day/date/{{.ID}}/open" class="btn"><span class="glyphicon glyphicon-ban-circle"></span></a>
     					{{end}}
       					<span>
         					&nbsp;{{.Text}}
@@ -32,19 +32,19 @@
   <form method="POST">
     <div class='row'>
       <div class='col-md-offset-3 col-md-6'>
-        <div class="input-group">
+        <!-- <div class="input-group">
           <span class="input-group-btn">
             <button class="btn btn-primary">
               <span class="glyphicon glyphicon-unchecked"></span>
               <span class="glyphicon glyphicon-pencil" style="display:none;"></span>
             </button> 
             <input type="hidden" id="newType" name="newType" value="OPEN" />
-        </span>      
+        </span>  -->     
         <input 
-            placeholder='start with / for note and . for item'  
+            placeholder='start with / for note or . for check item'  
             name='newItemText' id='newItemText'
             class='form-control'>
-        </div>
+        <!-- </div> -->
       </div>
     </div>
   </form>

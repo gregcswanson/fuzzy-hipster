@@ -4,6 +4,7 @@ import (
   "html/template"
   "net/http"
   "reflect"
+  "src/usecases"
 )
 
 //Compile templates on start
@@ -28,6 +29,17 @@ type Page struct {
 	Info string
 	Warning string
 	Success string
+}
+
+func buildPage(r *http.Request, u *usecases.Interactors) (Page) {
+  // get the flash messages
+  success := getFlashMessage(r, u.User.Current().Id)
+  info := getFlashInfo(r, u.User.Current().Id)
+  warning := getFlashWarning(r, u.User.Current().Id)
+  error := getFlashError(r, u.User.Current().Id)
+  
+  page := Page{Title: "Index", Success: success, Warning: warning, Info: info, Error: error }
+  return page
 }
  
 //Render the named template

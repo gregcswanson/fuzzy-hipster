@@ -56,7 +56,8 @@ func init() {
   r.HandleFunc("/api/1/items", ItemsHandler).Methods("GET")
   r.HandleFunc("/api/1/items/{id}", ItemHandler).Methods("GET")
   
-  r.HandleFunc("/index", useCaseRequest(indexHander)).Methods("GET")
+  r.HandleFunc("/", useCaseRequest(indexHander)).Methods("GET")
+  r.HandleFunc("/", useCaseRequest(indexPostHandler)).Methods("POST")
   r.HandleFunc("/projects", useCaseRequest(projectslistHandler)).Methods("GET")
   r.HandleFunc("/project/add", useCaseRequest(projectAddHandler)).Methods("GET")
   r.HandleFunc("/project/add", useCaseRequest(projectAddPostHandler)).Methods("POST")
@@ -65,7 +66,7 @@ func init() {
   r.HandleFunc("/about", useCaseRequest(aboutHander)).Methods("GET")
   r.HandleFunc("/app", handlerBundleApp).Methods("GET")
   r.HandleFunc("/logout", logout).Methods("GET")
-  r.HandleFunc("/", authenticate(handlerBundle)).Methods("GET")
+  r.HandleFunc("/emberapp", authenticate(handlerBundle)).Methods("GET")
   // Everything else fails.
   //r.HandleFunc("/{path:.*}", pageNotFound)
   http.Handle("/", r)

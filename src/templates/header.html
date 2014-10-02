@@ -16,7 +16,7 @@
               <div class="navbar-inner">
                   <a href="/index"  class='navbar-brand'>Fuzzy Hipster</a>
                   <ul class='nav navbar-nav navbar-right'>
-                  	<li {{if .IsDayView}}class="active"{{end}}><a href="/index">Today</a></li>
+                  	<li {{if .IsDayView}}class="active"{{end}}><a href="/">Today</a></li>
                   	<li {{if .IsProjectView}}class="active"{{end}}><a href="/projects">Projects</a></li>
                   	<li {{if .IsAboutView}}class="active"{{end}}><a href="/about">About</a></li>
                   </ul>
@@ -25,12 +25,40 @@
         </div>
       </div>
       
-      {{if .Error}}
-      <div class="container">
-      		<div class="alert alert-danger alert-dismissible" role="alert">
-  				<button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-  				<strong>Error!</strong> {{.Error}}
+  {{if .Error}}
+    <div class="container">
+      <div class="alert alert-danger alert-dismissible" role="alert">
+  		  <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+  			<strong>Error!</strong> {{.Error}}
 			</div>
 		</div>
-      {{end}}
+  {{end}}
+  
+  {{if .Success}}
+    <div class="container">
+      <div class="alert alert-success alert-dismissible" role="alert">
+  		  <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+  			<strong>Success!</strong> {{.Success}}
+		  </div>
+	  </div>
+  {{end}}
+  
+  {{if .Warning}}
+    <div class="container">
+      <div class="alert alert-warning alert-dismissible" role="alert">
+  		  <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+  			<strong>Warning!</strong> {{.Warning}}
+		  </div>
+	  </div>
+  {{end}}
+  
+  {{if .Info}}
+    <div class="container">
+      <div class="alert alert-info alert-dismissible" role="alert">
+  		  <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+  			<strong>Info!</strong> {{.Info}}
+		  </div>
+	  </div>
+  {{end}}
+  
 {{end}}

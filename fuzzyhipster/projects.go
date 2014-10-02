@@ -27,8 +27,13 @@ func projectslistHandler(w http.ResponseWriter, r *http.Request, u *usecases.Int
   	if projects == nil {
       	projects = []usecases.Project{}
 	} 
-
-	render(w, "projects", &Page{Title: "Index", IsProjectView: true, Model: projects })
+  
+  // build the page view model
+  page := buildPage(r, u)
+  page.Model = projects
+  page.IsProjectView = true
+  
+  render(w, "projects", page)  
 }
 
 func projectHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors) {  

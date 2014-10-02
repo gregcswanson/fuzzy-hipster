@@ -62,7 +62,7 @@ func (repository *DayItemRepository) Find(dayAsInt int) ([]domain.DayItem, error
     return dayItems, errNamespace
   }
   
-  q := datastore.NewQuery("DayItems").Filter("Day =", dayAsInt)//.Order("Sort")
+  q := datastore.NewQuery("DayItems").Filter("Day =", dayAsInt).Order("Sort")
 	keys, err := q.GetAll(c, &dayItems)
   if err != nil {    
     return dayItems, err
