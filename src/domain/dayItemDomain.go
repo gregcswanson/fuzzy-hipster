@@ -6,7 +6,7 @@ import (
 
 type DayItemRepository interface {
   Store(dayItem DayItem) (DayItem, error)
-  //Delete(dayItem DayItem) error
+  Delete(id string) error
 	//FindByProjectID(projectID string) ([]DayItem, error)
   Find(dayAsInt int) ([]DayItem, error)
   Get(id string) (DayItem, error)

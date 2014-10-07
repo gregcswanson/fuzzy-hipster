@@ -93,3 +93,15 @@ func (repository *DayItemRepository) Get(id string)(domain.DayItem, error) {
 	
   return dayItem, err
 }
+
+func (repository *DayItemRepository) Delete(id string) error {
+  globalContext := appengine.NewContext(repository.request)
+  c, _ := appengine.Namespace(globalContext, repository.namespace)
+  
+  key , err := datastore.DecodeKey(id)
+	if err != nil {
+		return err
+	}
+	err = datastore.Delete(c, key)
+  return err
+}

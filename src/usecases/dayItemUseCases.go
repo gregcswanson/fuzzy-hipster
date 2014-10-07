@@ -40,6 +40,37 @@ func (interactor *DayItemInteractor) FindByDay(dayAsInt int) ([]DayItem, error) 
 	return dayItems, nil
 }
 
+func (interactor *DayItemInteractor) FindById(itemId string) (DayItem, error) {
+  // get the item
+  dayItem, err := interactor.Context.DayItems.Get(itemId)
+  if err != nil {
+    return DayItem{}, err
+  }
+  
+  day := DayItem{dayItem.ID, dayItem.Day, dayItem.ProjectID,  
+                 dayItem.ProjectItemID, "", dayItem.Status, dayItem.Text, dayItem.Sort}
+  return day, nil
+
+}
+
+func (interactor *DayItemInteractor) Toggle(itemId string) error {
+  log.Println(itemId)
+  // get the item
+  dayItem, err := interactor.Context.DayItems.Get(itemId)
+  if err != nil {
+    return err
+  }
+  if dayItem.Status == "OPEN" {
+    dayItem.Status = "DONE"
+  } else if dayItem.Status == "DONE" {
+    dayItem.Status = "CANCELLED"
+  } else if dayItem.Status == "CANCELLED" {
+    dayItem.Status = "OPEN"
+  }
+  _ , errSave := interactor.Context.DayItems.Store(dayItem)
+  return  errSave
+}
+
 func (interactor *DayItemInteractor) Save(dayItem DayItem) (DayItem, error) {
 	// validate 
 	if dayItem.Text == "" {
@@ -73,5 +104,10 @@ func (interactor *DayItemInteractor) Save(dayItem DayItem) (DayItem, error) {
 	return dayItem, err
 }
 
+func (interactor *DayItemInteractor) Delete(itemId string) error {
+  // get the item
+  errSave := interactor.Context.DayItems.Delete(itemId)
+  return  errSave
+}
 
 

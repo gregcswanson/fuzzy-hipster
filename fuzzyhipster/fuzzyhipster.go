@@ -57,7 +57,13 @@ func init() {
   r.HandleFunc("/api/1/items/{id}", ItemHandler).Methods("GET")
   
   r.HandleFunc("/", useCaseRequest(indexHander)).Methods("GET")
-  r.HandleFunc("/", useCaseRequest(indexPostHandler)).Methods("POST")
+  r.HandleFunc("/day/{day_id}", useCaseRequest(dayHandler)).Methods("GET")
+  r.HandleFunc("/day/{day_id}", useCaseRequest(dayPostHandler)).Methods("POST")
+  r.HandleFunc("/day/{day_id}/item/{item_id}", useCaseRequest(dayItemHandler)).Methods("GET")
+  r.HandleFunc("/day/{day_id}/item/{item_id}", useCaseRequest(dayItemPostHandler)).Methods("POST")
+  r.HandleFunc("/day/{day_id}/item/{item_id}/toggle", useCaseRequest(togglePostHandler)).Methods("POST")
+  r.HandleFunc("/day/{day_id}/item/{item_id}/delete", useCaseRequest(dayItemDeleteHandler)).Methods("GET")
+  
   r.HandleFunc("/projects", useCaseRequest(projectslistHandler)).Methods("GET")
   r.HandleFunc("/project/add", useCaseRequest(projectAddHandler)).Methods("GET")
   r.HandleFunc("/project/add", useCaseRequest(projectAddPostHandler)).Methods("POST")

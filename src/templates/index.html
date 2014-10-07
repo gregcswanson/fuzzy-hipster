@@ -2,54 +2,74 @@
 {{template "header" .}}
 <div class="container">
 	<div class="row">
-		<div class="col-xs-12">
+    <div class="col-xs-1">
+      <div class="list-group left">
+        <a href="#" class="list-group-item active">Jrnl</a>
+        <a href="#" class="list-group-item">Prj</a>
+      </div>
+    </div>
+    <div class="col-xs-1">
+      <div class="list-group left">
+        <a href="#" class="list-group-item active">2014</a>
+        <a href="#" class="list-group-item">2013</a>
+        <a href="#" class="list-group-item">2012</a>
+      </div>
+    </div>
+    <div class="col-xs-1">
+      <div class="list-group left">
+        <a href="#" class="list-group-item">Jan</a>
+        <a href="#" class="list-group-item">Feb</a>
+        <a href="#" class="list-group-item">Mar</a>
+        <a href="#" class="list-group-item">Apr</a>
+        <a href="#" class="list-group-item">May</a>
+        <a href="#" class="list-group-item">Jun</a>
+        <a href="#" class="list-group-item">Jul</a>
+        <a href="#" class="list-group-item list-group-item-success">Aug</a>
+        <a href="#" class="list-group-item list-group-item-warning">Sept</a>
+        <a href="#" class="list-group-item active">Oct</a>
+        <a href="#" class="list-group-item">Nov</a>
+        <a href="#" class="list-group-item">Dec</a>
+      </div>
+    </div>    
+    <div class="col-xs-1">
+      <div class="list-group left">
+        {{range .Model.Navigation.Days}}
+          <a href="/day/{{.DateAsString}}" class="list-group-item {{if .Selected}}active{{end}}">{{.Display}}</a>
+        {{end}}
+      </div>
+    </div>
+		<div class="col-md-offset-2 col-xs-6">
 			<h2 class="text-center">{{.Model.DateDisplay}}</h2>
 			{{range .Model.DayItems}}
 				{{if eq .Status "NOTE"}}
-    				<div class='col-md-offset-3 col-md-6'>
       					<div class='well well-sm'>
-        					<span><i>{{.Text}}</i></span>
+        					<a href="/day/{{.Day}}/item/{{.ID}}"><i>{{.Text}}</i></a>
       					</div>
-    				</div>
     			{{else}}
-    				<div class='col-md-offset-3 col-md-6'>
-    					{{if eq .Status "OPEN"}}
-    						<a href="/day/date/{{.ID}}/done" class="btn"><span class="glyphicon glyphicon-unchecked"></span></a>
-    					{{else if eq .Status "DONE"}}
-    						<a href="/day/date/{{.ID}}/cancel" class="btn"><span class="glyphicon glyphicon-checked"></span></a>
-    					{{else if eq .Status "CANCELLED"}}
-    						<a href="/day/date/{{.ID}}/open" class="btn"><span class="glyphicon glyphicon-ban-circle"></span></a>
-    					{{end}}
-      					<span>
+              <form action="/day/{{.Day}}/item/{{.ID}}/toggle" method="POST" style="display: inline;">
+                <button class="btn" type="submit">
+                  {{if eq .Status "OPEN"}}
+                    <span>&#9744</span>
+                  {{else if eq .Status "DONE"}}
+                    <span>&#10003</span>
+                  {{else if eq .Status "CANCELLED"}}
+                    <span>&#10007</span>
+                  {{end}}
+                </button>
+              </form>
+      					<a href="/day/{{.Day}}/item/{{.ID}}">
         					&nbsp;{{.Text}}
-      					</span>
-    				</div>
+      					</a>
     				{{end}}
 			{{end}}
-		</div>
-	</div>
   <hr />
-  <form method="POST">
-    <div class='row'>
-      <div class='col-md-offset-3 col-md-6'>
-        <!-- <div class="input-group">
-          <span class="input-group-btn">
-            <button class="btn btn-primary">
-              <span class="glyphicon glyphicon-unchecked"></span>
-              <span class="glyphicon glyphicon-pencil" style="display:none;"></span>
-            </button> 
-            <input type="hidden" id="newType" name="newType" value="OPEN" />
-        </span>  -->     
+  <form method="POST"> 
         <input 
             placeholder='start with / for note or . for check item'  
             name='newItemText' id='newItemText'
             class='form-control'>
-        <!-- </div> -->
-      </div>
-    </div>
   </form>
   <hr />
-  <div class='row'>
     <div class='well'>
       <h4>To Do</h4>
       <ol>
