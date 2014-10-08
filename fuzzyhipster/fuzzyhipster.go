@@ -64,6 +64,8 @@ func init() {
   r.HandleFunc("/day/{day_id}/item/{item_id}/toggle", useCaseRequest(togglePostHandler)).Methods("POST")
   r.HandleFunc("/day/{day_id}/item/{item_id}/delete", useCaseRequest(dayItemDeleteHandler)).Methods("GET")
   
+  r.HandleFunc("/month/{month_id}", useCaseRequest(dayHandler)).Methods("GET")
+  
   r.HandleFunc("/projects", useCaseRequest(projectslistHandler)).Methods("GET")
   r.HandleFunc("/project/add", useCaseRequest(projectAddHandler)).Methods("GET")
   r.HandleFunc("/project/add", useCaseRequest(projectAddPostHandler)).Methods("POST")

@@ -7,6 +7,8 @@ import (
 	"appengine/datastore"
   "time"
   "log"
+  "strconv"
+  "fmt"
 )
 
 type DayItemRepository BaseRepository
@@ -65,6 +67,33 @@ func (repository *DayItemRepository) Find(dayAsInt int) ([]domain.DayItem, error
   q := datastore.NewQuery("DayItems").Filter("Day =", dayAsInt).Order("Sort")
 	keys, err := q.GetAll(c, &dayItems)
   if err != nil {    
+    return dayItems, err
+  } else {    
+    // loop through and add the keys as ID
+    for i := 0; i < len(keys); i++ {
+      dayItems[i].ID = keys[i].Encode()
+    }
+  }
+  return dayItems, nil
+}
+
+func (repository *DayItemRepository) FindMonth(year int, month int) ([]domain.DayItem, error) {
+  var dayItems []domain.DayItem
+	
+	globalContext := appengine.NewContext(repository.request)
+  c, errNamespace := appengine.Namespace(globalContext, repository.namespace)
+  if errNamespace != nil {
+    return dayItems, errNamespace
+  }
+  
+  // strconv.Atoi(id)
+  startOfMonth, _ := strconv.Atoi(fmt.Sprintf("%d%d00", year, month))
+  endOfMonth, _ := strconv.Atoi(fmt.Sprintf("%d%d99", year, month))
+  
+  q := datastore.NewQuery("DayItems").Filter("Day > ", startOfMonth).Filter("Day < ", endOfMonth)
+	keys, err := q.GetAll(c, &dayItems)
+  if err != nil {    
+    log.Println(err.Error())
     return dayItems, err
   } else {    
     // loop through and add the keys as ID

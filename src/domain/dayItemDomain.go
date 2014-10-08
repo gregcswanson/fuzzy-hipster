@@ -9,6 +9,7 @@ type DayItemRepository interface {
   Delete(id string) error
 	//FindByProjectID(projectID string) ([]DayItem, error)
   Find(dayAsInt int) ([]DayItem, error)
+  FindMonth(year int, month int) ([]DayItem, error)
   Get(id string) (DayItem, error)
 }
 

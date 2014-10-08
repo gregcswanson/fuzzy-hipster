@@ -11,24 +11,10 @@ import (
   "vendor/github.com/gorilla/mux"
 )
 
-type NavigationDay struct {
-  DateAsString string
-  Day int
-  DayCode string
-  Display string
-  Selected bool
-  HasItems bool
-  HasOpenItems bool
-}
-
-type Navigation struct {
-  Days []NavigationDay
-}
-
 type IndexPage struct {
 	DateAsInt int
 	DateDisplay string
-  Navigation Navigation
+  Month usecases.Month
 	DayItems []usecases.DayItem
 }
 
@@ -44,28 +30,16 @@ func dayHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors)
   vars := mux.Vars(r)
 	id := vars["day_id"]
   
-  dateAsInt, errDay := strconv.Atoi(id) //time.Now().Format("20060102"))
+  selectedDate, _ := time.Parse("20060102", id)
+  dateAsInt, errDay := strconv.Atoi(id)
   if errDay != nil {
     http.Redirect(w, r, "/", http.StatusFound)
     return
   }
-  indexPage := &IndexPage{ DateAsInt: dateAsInt, DateDisplay: id, Navigation: Navigation{} } 
+  indexPage := &IndexPage{ DateAsInt: dateAsInt, DateDisplay: id } 
 
-  // REFACTOR INTO OWN FUNCTION THAT CREATED NAVIGATION
-  // get all the day item in the current month to be used for summarising
-  // get the days in the current month
-  indexPage.Navigation.Days = []NavigationDay{}
-  selectedDate, _ := time.Parse("20060102", id)
-  for d := time.Date(selectedDate.Year(), selectedDate.Month(), 1, 23, 0, 0, 0, time.UTC); d.Month() == selectedDate.Month(); d = d.AddDate(0,0,1) {
-    dayCode := string(d.Format("Mon")[0])
-    dayNumber := d.Format("2")
-    display := strings.Join([]string{dayNumber, dayCode}, " ")
-    navigationDay := NavigationDay{ DateAsString: d.Format("20060102"), Day: d.Day(), Selected: d.Format("20060102") == id, Display: display, DayCode: dayCode }
-    // to do - get the has items and open items details
-    // get all items for the month before this method so the data is only hit once
-    indexPage.Navigation.Days = append(indexPage.Navigation.Days, navigationDay)
-  }
-  
+  // get the month summary
+  indexPage.Month, _ = u.DayItems.FindMonth(selectedDate)
   
 	// get the items for the current day
 	dayItems, err1 := u.DayItems.FindByDay(dateAsInt)

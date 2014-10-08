@@ -6,6 +6,8 @@ import (
   "time"
   "errors"
   "log"
+  "strings"
+  "strconv"
 )
 
 type DayItem struct {
@@ -17,6 +19,22 @@ type DayItem struct {
   Status string // open, closed, note, cancelled, running
 	Text string
   Sort int64
+}
+
+type MonthDay struct {
+  DateAsString string
+  Day int
+  DayCode string
+  Display string
+  Selected bool
+  HasItems bool
+  HasOpenItems bool
+  Summary string
+  Placeholder string
+}
+
+type Month struct {
+  Days []MonthDay
 }
 
 type DayItemInteractor struct {
@@ -108,6 +126,42 @@ func (interactor *DayItemInteractor) Delete(itemId string) error {
   // get the item
   errSave := interactor.Context.DayItems.Delete(itemId)
   return  errSave
+}
+
+func (interactor *DayItemInteractor) FindMonth(date time.Time) (Month, error) {
+  // initialise
+  month := Month{ Days: []MonthDay{} }
+  
+  monthItems, _ := interactor.Context.DayItems.FindMonth(date.Year(), int(date.Month()))
+  log.Println(len(monthItems))
+  
+  for d := time.Date(date.Year(), date.Month(), 1, 23, 0, 0, 0, time.UTC); d.Month() == date.Month(); d = d.AddDate(0,0,1) {
+    dayCode := string(d.Format("Mon")[0])
+    dayNumber := d.Format("2")
+    display := strings.Join([]string{dayNumber, dayCode}, " ")
+    monthDay := MonthDay{ DateAsString: d.Format("20060102"), Day: d.Day(), Selected: d.Format("20060102") == date.Format("20060102"), Display: display, DayCode: dayCode }
+    // to do - get the has items and open items details
+    for _, value := range monthItems {
+      dayString := strconv.Itoa(value.Day)
+      compareString := d.Format("20060102")
+      if dayString == compareString {
+        monthDay.HasItems = true
+        if value.Status == "OPEN" {
+          monthDay.HasOpenItems = true
+        }
+      }
+    }
+    // get all items for the month before this method so the data is only hit once
+    month.Days = append(month.Days, monthDay)
+  }
+  
+  return month, nil
+}
+
+func (interactor *DayItemInteractor) FindMonthSummary(date time.Time) (error) {
+  // return the month summary
+  // just a flag with is open or has items for the entire month  
+  return nil
 }
 
 
