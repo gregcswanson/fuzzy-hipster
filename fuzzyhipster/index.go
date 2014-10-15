@@ -14,6 +14,7 @@ import (
 type IndexPage struct {
 	DateAsInt int
 	DateDisplay string
+  Year usecases.Year
   Month usecases.Month
 	DayItems []usecases.DayItem
 }
@@ -40,6 +41,7 @@ func dayHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors)
 
   // get the month summary
   indexPage.Month, _ = u.DayItems.FindMonth(selectedDate)
+  indexPage.Year, _ = u.DayItems.FindYear(selectedDate)
   
 	// get the items for the current day
 	dayItems, err1 := u.DayItems.FindByDay(dateAsInt)

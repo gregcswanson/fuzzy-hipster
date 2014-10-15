@@ -34,7 +34,17 @@ type MonthDay struct {
 }
 
 type Month struct {
+  Selected bool
+  Display string
+  MonthCode string
   Days []MonthDay
+  HasItems bool
+  HasOpenItems bool
+}
+
+type Year struct {
+  Year int
+  Months []Month
 }
 
 type DayItemInteractor struct {
@@ -158,10 +168,22 @@ func (interactor *DayItemInteractor) FindMonth(date time.Time) (Month, error) {
   return month, nil
 }
 
-func (interactor *DayItemInteractor) FindMonthSummary(date time.Time) (error) {
-  // return the month summary
+func (interactor *DayItemInteractor) FindYear(date time.Time) (Year, error) {
+  // return the year summary
+  year := Year{ Months: []Month{}, Year: date.Year() }
+  
+  // loop through 12 months to create the structure
+  for i := 1; i < 13; i++ {
+    d := time.Date(date.Year(), time.Month(i), 1, 23, 0, 0, 0, time.UTC);
+    month := Month{ MonthCode: d.Format("200601"), Display: d.Format("Jan") }
+    if d.Month() == date.Month() {
+      month.Selected = true
+    }
+    year.Months = append(year.Months, month)
+  }
+  
   // just a flag with is open or has items for the entire month  
-  return nil
+  return year, nil
 }
 
 

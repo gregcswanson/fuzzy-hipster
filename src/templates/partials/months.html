@@ -1,0 +1,10 @@
+{{define "months"}}
+<p class="text-center">
+<a href="#">2014</a>
+</p>
+<div class="list-group left">
+  {{range .}}
+  <a href="/month/{{.MonthCode}}" class="list-group-item {{if .Selected}}active{{else if .HasOpenItems}}list-group-item-warning{{else if .HasItems}}list-group-item-info{{end}}">{{.Display}}</a>
+  {{end}}
+</div>
+{{end}}

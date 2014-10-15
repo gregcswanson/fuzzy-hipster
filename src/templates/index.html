@@ -3,34 +3,10 @@
 <div class="container">
 	<div class="row">
     <div class="col-xs-1">
-      <div class="list-group left">
-        <a href="#" class="list-group-item active">Jrnl</a>
-        <a href="#" class="list-group-item">Prj</a>
-      </div>
-      <a href="/">today</a>
+      {{template "leftnavigation" .}}
     </div>
     <div class="col-xs-1">
-      <div class="list-group left">
-        <a href="#" class="list-group-item active">2014</a>
-        <a href="#" class="list-group-item">2013</a>
-        <a href="#" class="list-group-item">2012</a>
-      </div>
-    </div>
-    <div class="col-xs-1">
-      <div class="list-group left">
-        <a href="#" class="list-group-item">Jan</a>
-        <a href="#" class="list-group-item">Feb</a>
-        <a href="#" class="list-group-item">Mar</a>
-        <a href="#" class="list-group-item">Apr</a>
-        <a href="#" class="list-group-item">May</a>
-        <a href="#" class="list-group-item">Jun</a>
-        <a href="#" class="list-group-item">Jul</a>
-        <a href="#" class="list-group-item list-group-item-success">Aug</a>
-        <a href="#" class="list-group-item list-group-item-warning">Sept</a>
-        <a href="#" class="list-group-item active">Oct</a>
-        <a href="#" class="list-group-item">Nov</a>
-        <a href="#" class="list-group-item">Dec</a>
-      </div>
+      {{template "months" .Model.Year.Months}}
     </div>    
     <div class="col-xs-1">
       <div class="list-group left">
@@ -39,7 +15,7 @@
         {{end}}
       </div>
     </div>
-		<div class="col-md-offset-2 col-xs-6">
+		<div class="col-md-offset-2 col-xs-7">
 			<h2 class="text-center">{{.Model.DateDisplay}}</h2>
 			{{range .Model.DayItems}}
 				{{if eq .Status "NOTE"}}
