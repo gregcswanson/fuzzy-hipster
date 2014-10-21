@@ -5,6 +5,7 @@ import (
   "net/http"
   "reflect"
   "src/usecases"
+  "time"
 )
 
 //Compile templates on start
@@ -28,6 +29,9 @@ type Page struct {
 	IsMonthView bool
 	IsProjectView bool
 	IsAboutView bool
+  SelectedDate time.Time
+  Year usecases.Year
+  Month usecases.Month
 	Model interface{}
 	Error string
 	Info string
@@ -35,14 +39,18 @@ type Page struct {
 	Success string
 }
 
-func buildPage(r *http.Request, u *usecases.Interactors) (Page) {
+func buildPage(r *http.Request, u *usecases.Interactors, d time.Time) (Page) {
+  // build the navigation
+  month, _ := u.DayItems.FindMonth(d)
+  year, _ := u.DayItems.FindYear(d)
+  
   // get the flash messages
   success := getFlashMessage(r, u.User.Current().Id)
   info := getFlashInfo(r, u.User.Current().Id)
   warning := getFlashWarning(r, u.User.Current().Id)
   error := getFlashError(r, u.User.Current().Id)
   
-  page := Page{Title: "Index", Success: success, Warning: warning, Info: info, Error: error }
+  page := Page{Title: "Index", Success: success, Warning: warning, Info: info, Error: error, Year: year, Month: month }
   return page
 }
  

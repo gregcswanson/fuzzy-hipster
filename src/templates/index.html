@@ -2,21 +2,7 @@
 {{template "header" .}}
 <div class="container">
 	<div class="row">
-    <div class="col-xs-1">
-      {{template "leftnavigation" .}}
-    </div>
-    <div class="col-xs-1">
-      {{template "months" .Model.Year.Months}}
-    </div>    
-    <div class="col-xs-1">
-      <div class="list-group left">
-        {{range .Model.Month.Days}}
-          <a href="/day/{{.DateAsString}}" class="list-group-item {{if .Selected}}active{{else if .HasOpenItems}}list-group-item-warning{{else if .HasItems}}list-group-item-info{{end}}">{{.Display}}</a>
-        {{end}}
-      </div>
-    </div>
-		<div class="col-md-offset-2 col-xs-7">
-			<h2 class="text-center">{{.Model.DateDisplay}}</h2>
+    <div class="col-xs-12">
 			{{range .Model.DayItems}}
 				{{if eq .Status "NOTE"}}
       					<div class='well well-sm'>

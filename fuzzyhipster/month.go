@@ -36,10 +36,10 @@ func monthHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactor
   monthPage.Year, _ = u.DayItems.FindYear(selectedDate)
   
   // setup the master page
-  page := buildPage(r, u)
+  page := buildPage(r, u, selectedDate)
   page.Title = "Month"
   page.Model = monthPage
-  page.IsDayView = true
+  page.IsMonthView = true
   
 	render(w, "month", page)  
 }

@@ -14,11 +14,55 @@
         <div class="navbar navbar-default">
             <div class="container">
               <div class="navbar-inner">
-                  <a href="/index"  class='navbar-brand'>Fuzzy Hipster</a>
-                  <ul class='nav navbar-nav navbar-right'>
-                  	<li {{if .IsDayView}}class="active"{{end}}><a href="/">Today</a></li>
-                  	<li {{if .IsProjectView}}class="active"{{end}}><a href="/projects">Projects</a></li>
-                  	<li {{if .IsAboutView}}class="active"{{end}}><a href="/about">About</a></li>
+                  <ul class='nav navbar-nav'>
+                  	<li>
+                       <a href="#" class="dropdown-toggle" data-toggle="dropdown">Journel <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                        <li><a href="/">Today</a></li>
+                        <li><a href="/projects">Projects</a></li>
+                        <li><a href="#">Profile</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                       <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{.Year.Year}}</a>
+                        <ul class="dropdown-menu" role="menu">
+                        <li><a href="/month/201501">2015</a></li>
+                        <li><a href="/month/201401">2014</a></li>
+                        <li><a href="/month/201301">2013</a></li>
+                        </ul>
+                    </li>
+                    <li {{if .IsDayView}}
+                         {{else if .IsMonthView}}class="active"{{end}}>
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        {{.Year.Selected.Name}}
+                      </a>
+                      <ul class="dropdown-menu" role="menu">
+                        {{range .Year.Months}}
+                        <li class="{{if .Selected}}active{{end}}">
+                          <a href="/month/{{.MonthCode}}" >
+                            {{.Name}}
+                          </a>
+                        </li>
+                        {{end}}
+                      </ul>
+                    </li>
+                    {{if .IsDayView}}
+                    <li class="active">
+                       <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                         {{.Month.SelectedDay.Name}}
+                      </a>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Overview</a></li>
+                        <li><a href="#">Month Tasks</a></li>
+                        <li class="divider"></li>
+                        {{range .Month.Days}}
+                        <li {{if .Selected}}class="active"{{end}}>
+                          <a href="/day/{{.DateAsString}}">{{.Name}}</a>
+                        </li>
+                        {{end}}
+                      </ul>
+                    </li>
+                    {{end}}
                   </ul>
               </div>
             </div>

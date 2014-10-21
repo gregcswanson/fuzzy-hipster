@@ -26,6 +26,8 @@ type MonthDay struct {
   Day int
   DayCode string
   Display string
+  Name string
+  ShortName string
   Selected bool
   HasItems bool
   HasOpenItems bool
@@ -36,7 +38,10 @@ type MonthDay struct {
 type Month struct {
   Selected bool
   Display string
+  Name string
+  ShortName string
   MonthCode string
+  SelectedDay MonthDay
   Days []MonthDay
   HasItems bool
   HasOpenItems bool
@@ -44,6 +49,7 @@ type Month struct {
 
 type Year struct {
   Year int
+  Selected Month
   Months []Month
 }
 
@@ -149,7 +155,20 @@ func (interactor *DayItemInteractor) FindMonth(date time.Time) (Month, error) {
     dayCode := string(d.Format("Mon")[0])
     dayNumber := d.Format("2")
     display := strings.Join([]string{dayNumber, dayCode}, " ")
-    monthDay := MonthDay{ DateAsString: d.Format("20060102"), Day: d.Day(), Selected: d.Format("20060102") == date.Format("20060102"), Display: display, DayCode: dayCode }
+    o := ordinal(d.Day())
+    monthDay := MonthDay{ 
+      DateAsString: d.Format("20060102"), 
+      Day: d.Day(), 
+      Selected: d.Format("20060102") == date.Format("20060102"), 
+      Display: display, 
+      Name: d.Format("Monday, 2" + o ),
+      ShortName: d.Format("Mon, 2"),
+      DayCode: dayCode }
+    
+    if monthDay.Selected {
+      month.SelectedDay = monthDay
+    }
+    
     // to do - get the has items and open items details
     for _, value := range monthItems {
       dayString := strconv.Itoa(value.Day)
@@ -175,15 +194,31 @@ func (interactor *DayItemInteractor) FindYear(date time.Time) (Year, error) {
   // loop through 12 months to create the structure
   for i := 1; i < 13; i++ {
     d := time.Date(date.Year(), time.Month(i), 1, 23, 0, 0, 0, time.UTC);
-    month := Month{ MonthCode: d.Format("200601"), Display: d.Format("Jan") }
+    month := Month{ 
+      MonthCode: d.Format("200601"), 
+      Display: d.Format("Jan"), 
+      Name: d.Format("January"),
+      ShortName: d.Format("Jan"),
+    }
     if d.Month() == date.Month() {
       month.Selected = true
+      year.Selected = month
     }
     year.Months = append(year.Months, month)
   }
   
   // just a flag with is open or has items for the entire month  
   return year, nil
+}
+
+func ordinal(x int) string {
+  suffix := "th"
+  switch x % 10 {
+    case 1: if (x % 100 != 11) { suffix = "st" }
+    case 2: if (x % 100 != 12) { suffix = "nd" }
+    case 3: if (x % 100 != 13) { suffix = "rd" }
+  }
+  return suffix
 }
 
 

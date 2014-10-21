@@ -54,10 +54,11 @@ func dayHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors)
   	indexPage.DayItems = dayItems
   
   // setup the master page
-  page := buildPage(r, u)
+  page := buildPage(r, u, selectedDate)
   page.Title = "Index"
   page.Model = indexPage
   page.IsDayView = true
+  page.IsMonthView = true
   
 	render(w, "index", page)  
 }
@@ -129,10 +130,11 @@ func dayItemHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interact
   }
   
   // setup the master page
-  page := buildPage(r, u)
+  page := buildPage(r, u, time.Now())
   page.Title = "Index"
   page.Model = dayItem
   page.IsDayView = true
+  page.IsMonthView = true
   
 	render(w, "dayedit", page)
 }

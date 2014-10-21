@@ -1,6 +1,6 @@
 {{define "leftnavigation"}}
 <div class="list-group left">
-  <a href="/" class="list-group-item active">Jrnl</a>
-  <a href="/projects" class="list-group-item">Prj</a>
+  <a href="/" class="list-group-item {{if .IsDayView}}active{{end}}">Jrnl</a>
+  <a href="/projects" class="list-group-item {{if .IsProjectView}}active{{end}}">Prj</a>
 </div>
 {{end}}

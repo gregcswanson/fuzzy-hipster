@@ -2,13 +2,22 @@
 {{template "header" .}}
 <div class="container">
 	<div class="row">
-		<div class="col-xs-12">
-			<h2 class="text-center">Projects <a href="/project/add" class="btn btn-sm btn-primary pull-right">Add</a></h2>
-			<div class='list-group'>
-          		{{range .Model}}
-					<p><a href="/project/{{.ID}}">{{.Title}}</a></p>
+    <div class="col-xs-1">
+      {{template "leftnavigation" .}}
+    </div>
+		<div class="col-xs-11">
+			<div class='list-group left'>
+        {{range .Model}}
+					<a class="list-group-item" href="/project/{{.ID}}">{{.Title}}</a>
 				{{end}}
 			</div>
+      <hr />
+      <form method="POST" action="/project/add">
+				<div class="form-group">
+					<input type="text" placeholder='start a new project' name="Title" id="Title" value="" class="form-control" />
+				</div>
+				<button type="submit" class="btn btn-default">Submit</button>
+      </form>
 		</div>
 	</div>
 </div>

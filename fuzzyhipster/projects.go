@@ -4,7 +4,7 @@ import (
   //"fmt"
   "net/http"
   "src/usecases"
-  //"time"
+  "time"
   "log"
   //"errors"
   //"strconv"
@@ -29,7 +29,7 @@ func projectslistHandler(w http.ResponseWriter, r *http.Request, u *usecases.Int
 	} 
   
   // build the page view model
-  page := buildPage(r, u)
+  page := buildPage(r, u, time.Now())
   page.Model = projects
   page.IsProjectView = true
   
