@@ -6,17 +6,45 @@
 			<form method="POST">
 				<div class="form-group">
 					<label class="form-label">Text</label>
-					<input type="text" name="Text" id="Text" value="{{.Model.Text}}" class="form-control" />
+					<input type="text" name="Text" id="Text" value="{{.Model.Item.Text}}" class="form-control" />
 				</div>
         <div class="form-group">
-          <input type="radio" name="Status" value="OPEN" {{if eq .Model.Status "OPEN"}}checked{{end}}>Open<br />
-          <input type="radio" name="Status" value="DONE" {{if eq .Model.Status "DONE"}}checked{{end}}>Done<br />
-          <input type="radio" name="Status" value="CANCELLED" {{if eq .Model.Status "CANCELLED"}}checked{{end}}>Cancelled<br />
-          <input type="radio" name="Status" value="NOTE" {{if eq .Model.Status "NOTE"}}checked{{end}}>Note
+          <label class="form-label">Type</label><br />
+          <div class="btn-group" data-toggle="buttons">          
+          <label class="btn btn-default {{if eq .Model.Item.Status "OPEN"}}active{{end}}">
+            <input type="radio" name="Status" id="Status" value="OPEN" {{if eq .Model.Item.Status "OPEN"}}checked{{end}}><span>Open</span>
+          </label>
+          <label class="btn btn-default {{if eq .Model.Item.Status "DONE"}}active{{end}}">
+            <input type="radio" name="Status" id="Status" value="DONE" {{if eq .Model.Item.Status "DONE"}}checked{{end}}><span>Done</span>
+          </label>
+          <label class="btn btn-default {{if eq .Model.Item.Status "CANCELLED"}}active{{end}}">
+            <input type="radio" name="Status" id="Status" value="CANCELLED" {{if eq .Model.Item.Status "CANCELLED"}}checked{{end}}><span>Cancel</span>
+          </label>
+          <label class="btn btn-default {{if eq .Model.Item.Status "NOTE"}}active{{end}}">
+            <input type="radio" name="Status" id="Status" value="NOTE" {{if eq .Model.Item.Status "NOTE"}}checked{{end}}><span>Note</span>
+          </label>
+          <label class="btn btn-default {{if eq .Model.Item.Status "LABEL"}}active{{end}}">
+            <input type="radio" name="Status" id="Status" value="LABEL" {{if eq .Model.Item.Status "LABEL"}}checked{{end}}><span>Label</span>
+          </label>
         </div>
-        <a href="/day/{{.Model.Day}}">Cancel</a>
-        <a href="/day/{{.Model.Day}}/item/{{.Model.ID}}/delete" class="btn btn-danger">Delete</a>
-        <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Position</label>
+          <select class="form-control" id="Sort" name="Sort">
+            {{range .Model.Sort}}
+              <option {{if .Selected}}selected{{end}} value="{{.Position}}">{{.Position}}{{if .Selected}}{{else}} - {{.Text}}{{end}}<option>
+            {{end}}
+          </select>
+        </div>
+        <hr />
+        <div class="row">
+          <div class="col-xs-12">
+          <a href="/day/{{.Model.Item.Day}}">Cancel</a>
+          <a href="#" class="btn btn-warning">Move</a>
+          <a href="/day/{{.Model.Item.Day}}/item/{{.Model.Item.ID}}/delete" class="btn btn-danger">Delete</a>
+          <button type="submit" class="btn btn-success">Save</button>
+          </div>
+        </div>
       </form>
 		</div>
 	</div>

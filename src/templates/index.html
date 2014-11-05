@@ -8,9 +8,11 @@
       					<div class='well well-sm'>
         					<a href="/day/{{.Day}}/item/{{.ID}}"><i>{{.Text}}</i></a>
       					</div>
-    			{{else}}
+        {{else if eq .Status "LABEL"}}
+        					<a href="/day/{{.Day}}/item/{{.ID}}"><b>{{.Text}}</b></a><br />
+    		{{else}}
               <form action="/day/{{.Day}}/item/{{.ID}}/toggle" method="POST" style="display: inline;">
-                <button class="btn" type="submit">
+                <button class="btn btn-link" type="submit">
                   {{if eq .Status "OPEN"}}
                     <span>&#9744</span>
                   {{else if eq .Status "DONE"}}
@@ -22,13 +24,13 @@
               </form>
       					<a href="/day/{{.Day}}/item/{{.ID}}">
         					&nbsp;{{.Text}}
-      					</a>
-    				{{end}}
+      					</a><br />
+    		{{end}}
 			{{end}}
   <hr />
   <form method="POST"> 
         <input 
-            placeholder='start with / for note or . for check item'  
+            placeholder='start with / note | . todo | * label'  
             name='newItemText' id='newItemText'
             class='form-control'>
   </form>

@@ -114,9 +114,14 @@ func (interactor *DayItemInteractor) Save(dayItem DayItem) (DayItem, error) {
 	
   // either save or create
 	entity := domain.DayItem{}
+  sortChanged := false
   if dayItem.ID != "" {
     // get the current entity
     entity, _ = interactor.Context.DayItems.Get(dayItem.ID)
+    if entity.Sort != dayItem.Sort {
+      sortChanged = true
+      entity.Sort = dayItem.Sort
+    }
   } else {
     // setup the new record
     entity.Day = dayItem.Day
@@ -134,6 +139,19 @@ func (interactor *DayItemInteractor) Save(dayItem DayItem) (DayItem, error) {
 	if err == nil {
 		dayItem.ID = storedEntity.ID
 	}
+  
+  if sortChanged {
+     // update all other item sorting
+    otherItems, _ := interactor.Context.DayItems.Find(dayItem.Day)
+    for i, otherItem := range otherItems {
+      var position int64
+      position = int64(i + 1)
+      if position != dayItem.Sort && otherItem.ID != dayItem.ID {
+        otherItem.Sort = position
+        _, _ = interactor.Context.DayItems.Store(otherItem)
+      }
+	  }
+  }
 	
 	return dayItem, err
 }

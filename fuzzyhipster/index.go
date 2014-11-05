@@ -19,6 +19,18 @@ type IndexPage struct {
 	DayItems []usecases.DayItem
 }
 
+type EditPage struct {
+	Item usecases.DayItem
+  Sort []Sort
+}
+
+type Sort struct {
+  Position int
+  Sort int64
+  Text string
+  Selected bool
+}
+
 func indexHander(w http.ResponseWriter, r *http.Request, u *usecases.Interactors) {  
 	// get the current day
 	dateAsString := time.Now().Format("20060102")
@@ -91,15 +103,18 @@ func dayPostHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interact
   } else if strings.HasPrefix(text, ".") {
     text = strings.TrimPrefix(text, ".")
     status = "OPEN"
+  } else if strings.HasPrefix(text, "*") {
+    text = strings.TrimPrefix(text, "*")
+    status = "LABEL"
   }
 			
   dayItem := usecases.DayItem{ Day: dateAsInt, Text: text, Sort: 0, Status: status } 
   	_, err := u.DayItems.Save(dayItem)
   	if err != nil {
     	flashError(r, u.User.Current().Id ,err.Error())
-  	} else {
-      flashMessage(r, u.User.Current().Id ,"item created")
-    }
+  	} //else {
+      //flashMessage(r, u.User.Current().Id ,"item created")
+    //}
     
   	http.Redirect(w, r, "/day/" + id, http.StatusFound)
 }
@@ -129,10 +144,23 @@ func dayItemHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interact
     log.Println(err)
   }
   
+  // setup the page
+  editPage := EditPage{ Item: dayItem}
+  otherItems, _ := u.DayItems.FindByDay(dayItem.Day)
+  
+  // create the sort order
+  editPage.Sort = make([]Sort, len(otherItems))
+	for i, otherItem := range otherItems {
+    editPage.Sort[i] = Sort{i + 1, otherItem.Sort, otherItem.Text, false}
+    if otherItem.ID == dayItem.ID {
+      editPage.Sort[i].Selected = true
+    }
+	}
+  
   // setup the master page
   page := buildPage(r, u, time.Now())
   page.Title = "Index"
-  page.Model = dayItem
+  page.Model = editPage
   page.IsDayView = true
   page.IsMonthView = true
   
@@ -161,6 +189,8 @@ func dayItemPostHandler(w http.ResponseWriter, r *http.Request, u *usecases.Inte
   
   dayItem.Text = r.Form.Get("Text")
   dayItem.Status = r.Form.Get("Status")
+  sort, _ := strconv.Atoi(r.Form.Get("Sort"))
+  dayItem.Sort = int64(sort)
   
   _, errSave := u.DayItems.Save(dayItem)
   if errSave != nil {
