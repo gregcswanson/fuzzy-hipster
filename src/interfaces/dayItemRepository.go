@@ -30,20 +30,20 @@ func (repository *DayItemRepository) Store(item domain.DayItem) (domain.DayItem,
   }
   
   if item.ID != "" {
-    log.Println("Update Day Record")
-    log.Println(item.ID)
+    //log.Println("Update Day Record")
+    //log.Println(item.ID)
 		// update
 		key , err := datastore.DecodeKey(item.ID)
 		if err != nil {
 			return item, err
 		}
-    log.Println(key)
+    //log.Println(key)
 		_, err = datastore.Put(c, key, &item)
     	if err != nil {
 			return item, err
 		}
 	} else {
-    log.Println("Create Day Record")
+    //log.Println("Create Day Record")
 		// new
 		key, err := datastore.Put(c, datastore.NewIncompleteKey(c, "DayItems", nil), &item)
     	if err != nil {
@@ -64,7 +64,7 @@ func (repository *DayItemRepository) Find(dayAsInt int) ([]domain.DayItem, error
     return dayItems, errNamespace
   }
   
-  q := datastore.NewQuery("DayItems").Filter("Day =", dayAsInt).Order("Sort")
+  q := datastore.NewQuery("DayItems").Filter("Day =", dayAsInt) //.Order("Sort")
 	keys, err := q.GetAll(c, &dayItems)
   if err != nil {    
     return dayItems, err

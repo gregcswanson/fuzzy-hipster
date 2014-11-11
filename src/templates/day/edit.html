@@ -32,7 +32,7 @@
           <label class="form-label">Position</label>
           <select class="form-control" id="Sort" name="Sort">
             {{range .Model.Sort}}
-              <option {{if .Selected}}selected{{end}} value="{{.Position}}">{{.Position}}{{if .Selected}}{{else}} - {{.Text}}{{end}}<option>
+              <option value="{{.Sort}}" {{if .Selected}}selected{{end}}>{{.Position}}{{if .Selected}}{{else}} - {{.Text}}{{end}}</option>
             {{end}}
           </select>
         </div>

@@ -154,6 +154,7 @@ func dayItemHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interact
     editPage.Sort[i] = Sort{i + 1, otherItem.Sort, otherItem.Text, false}
     if otherItem.ID == dayItem.ID {
       editPage.Sort[i].Selected = true
+      log.Println("Sort Selected ", otherItem.Sort)
     }
 	}
   
@@ -187,10 +188,14 @@ func dayItemPostHandler(w http.ResponseWriter, r *http.Request, u *usecases.Inte
     return
   }
   
+  log.Println(dayItem.Sort)
   dayItem.Text = r.Form.Get("Text")
   dayItem.Status = r.Form.Get("Status")
+  log.Println(r.Form.Get("Status"))
+  log.Println(r.Form.Get("Sort"))
   sort, _ := strconv.Atoi(r.Form.Get("Sort"))
   dayItem.Sort = int64(sort)
+  log.Println(dayItem.Sort)
   
   _, errSave := u.DayItems.Save(dayItem)
   if errSave != nil {

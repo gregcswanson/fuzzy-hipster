@@ -8,6 +8,7 @@ import (
   "log"
   "strings"
   "strconv"
+  "sort"
 )
 
 type DayItem struct {
@@ -59,7 +60,7 @@ type DayItemInteractor struct {
 
 func (interactor *DayItemInteractor) FindByDay(dayAsInt int) ([]DayItem, error) {
 	// get the items on the day
-  log.Println("usecases.DayItemInteractor.Find")
+  log.Println("usecases.DayItemInteractor.FindByDay")
   foundDayItems, findError := interactor.Context.DayItems.Find(dayAsInt)
   if findError != nil {
     log.Println(findError)
@@ -67,6 +68,7 @@ func (interactor *DayItemInteractor) FindByDay(dayAsInt int) ([]DayItem, error) 
   }
 	// Copy to the use case model
   var dayItems []DayItem
+  sort.Sort(domain.DayItemBySort(foundDayItems))
 	dayItems = make([]DayItem, len(foundDayItems))
 	for i, dayItem := range foundDayItems {
     dayItems[i] = DayItem{dayItem.ID, dayItem.Day, dayItem.ProjectID,  dayItem.ProjectItemID, "", dayItem.Status, dayItem.Text, dayItem.Sort}
@@ -83,6 +85,9 @@ func (interactor *DayItemInteractor) FindById(itemId string) (DayItem, error) {
   
   day := DayItem{dayItem.ID, dayItem.Day, dayItem.ProjectID,  
                  dayItem.ProjectItemID, "", dayItem.Status, dayItem.Text, dayItem.Sort}
+  
+  log.Println(dayItem.Sort)
+  
   return day, nil
 
 }
@@ -106,54 +111,66 @@ func (interactor *DayItemInteractor) Toggle(itemId string) error {
 }
 
 func (interactor *DayItemInteractor) Save(dayItem DayItem) (DayItem, error) {
+  
+  // update the day and month summary
+  
 	// validate 
 	if dayItem.Text == "" {
 		err := errors.New("Text is required")
 		return dayItem, err
 	}
+  
+  allDayItems, _ := interactor.Context.DayItems.Find(dayItem.Day)
 	
   // either save or create
-	entity := domain.DayItem{}
-  sortChanged := false
   if dayItem.ID != "" {
+    log.Println("Usecase update item", dayItem.Text)
     // get the current entity
-    entity, _ = interactor.Context.DayItems.Get(dayItem.ID)
-    if entity.Sort != dayItem.Sort {
-      sortChanged = true
-      entity.Sort = dayItem.Sort
+    i, findError := domain.DayItems(allDayItems).Find(dayItem.ID)
+    if findError != nil {
+      log.Println(findError)
+      return dayItem, findError
     }
+    if(allDayItems[i].Sort < dayItem.Sort ) {
+      allDayItems[i].Sort = dayItem.Sort + 5
+    }else if (allDayItems[i].Sort > dayItem.Sort) {
+      allDayItems[i].Sort = dayItem.Sort - 5
+    }    
+	  allDayItems[i].Status = dayItem.Status 
+    allDayItems[i].Text = dayItem.Text
   } else {
     // setup the new record
+    log.Println("Usecase insert item", dayItem.Text)
+    entity := domain.DayItem{}
     entity.Day = dayItem.Day
     entity.ProjectID = dayItem.ProjectID
     entity.ProjectItemID = dayItem.ProjectItemID
     entity.Start = time.Now()
     entity.End = time.Now()
     entity.Duration = 0
+	  entity.Status = dayItem.Status
+    entity.Text = dayItem.Text
+    entity.Sort = time.Now().Unix()
+    allDayItems = append(allDayItems, entity)
   }
-	entity.Status = dayItem.Status
-  entity.Text = dayItem.Text
   
-	// save
-	storedEntity, err := interactor.Context.DayItems.Store(entity)
-	if err == nil {
-		dayItem.ID = storedEntity.ID
-	}
-  
-  if sortChanged {
-     // update all other item sorting
-    otherItems, _ := interactor.Context.DayItems.Find(dayItem.Day)
-    for i, otherItem := range otherItems {
-      var position int64
-      position = int64(i + 1)
-      if position != dayItem.Sort && otherItem.ID != dayItem.ID {
-        otherItem.Sort = position
-        _, _ = interactor.Context.DayItems.Store(otherItem)
+  sort.Sort(domain.DayItemBySort(allDayItems))
+    var position int64 
+    for _, otherItem := range allDayItems {
+      position = position + 10
+      log.Println(otherItem.Sort, position, otherItem.Status, otherItem.Text)
+      otherItem.Sort = position
+      storedEntity, err := interactor.Context.DayItems.Store(otherItem)
+      if err == nil {
+        if(dayItem.ID == ""){
+          dayItem.ID = storedEntity.ID
+        }
+	    } else {
+        log.Println("ERROR",err.Error())
       }
 	  }
-  }
 	
-	return dayItem, err
+	return dayItem, nil
 }
 
 func (interactor *DayItemInteractor) Delete(itemId string) error {
