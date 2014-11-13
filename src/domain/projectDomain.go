@@ -15,6 +15,7 @@ type Project struct {
 	ID string `datastore:"-"`
   BookID string
 	Title string
+  Description string `datastore:",noindex"`
   Count int `datastore:",noindex"`
   Open int  `datastore:",noindex"`
   Active bool

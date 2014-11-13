@@ -27,6 +27,7 @@ type Page struct {
 	Title string
 	IsDayView bool
 	IsMonthView bool
+	IsProjectsView bool
 	IsProjectView bool
 	IsAboutView bool
   SelectedDate time.Time

@@ -9,9 +9,10 @@ import (
 )
 
 type Project struct {
-	ID      string
-	Title   string
-  Lines  []ProjectLine
+	ID           string
+	Title        string
+  Description  string
+  Lines        []ProjectLine
 }
 
 type ProjectLine struct {
@@ -35,7 +36,7 @@ func (interactor *ProjectInteractor) FindActive() ([]Project, error) {
 	projects = make([]Project, len(activeProjects))
 	for i, project := range activeProjects {
     projectLines := make([]ProjectLine, 0)
-		projects[i] = Project{project.ID, project.Title,  projectLines}
+		projects[i] = Project{project.ID, project.Title, project.Description,  projectLines}
 	}
 	return projects, nil
 }
@@ -62,6 +63,7 @@ func (interactor *ProjectInteractor) Save(project Project) (Project, error) {
     entity.BookID = ""
   }
 	entity.Title = project.Title
+  entity.Description = project.Description
   
 	// save
 	storedEntity, err := interactor.Context.Projects.Store(entity)
@@ -91,7 +93,7 @@ func (interactor *ProjectInteractor) FindByID(id string) (Project, error) {
 	}
   
 	// Copy to the use case model
-  project := Project{domainProject.ID, domainProject.Title, projectLines}
+  project := Project{domainProject.ID, domainProject.Title, domainProject.Description, projectLines}
 	return project, nil
 }
 
@@ -153,11 +155,23 @@ func (interactor *ProjectInteractor) DeleteItem(id string) (error) {
 
 func (interactor *ProjectInteractor) Delete(id string) (error) {
   // get the project
+  domainProject, err := interactor.Context.Projects.Get(id)
+  if err != nil {
+    return err
+  }   
   
   // delete the lines
+  lines, _ := interactor.Context.ProjectItems.Find(id)
+	for _, projectLine := range lines {
+    lineError := interactor.Context.ProjectItems.Delete(projectLine)
+    if lineError != nil {  
+      return lineError
+    }
+	}
   
   // delete the header
-  return nil
+  deleteError := interactor.Context.Projects.Delete(domainProject)
+  return deleteError
 }
 
 // SaveLine

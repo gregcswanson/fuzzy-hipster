@@ -67,8 +67,11 @@ func init() {
   r.HandleFunc("/month/{month_id}", useCaseRequest(monthHandler)).Methods("GET")
   
   r.HandleFunc("/projects", useCaseRequest(projectslistHandler)).Methods("GET")
-  r.HandleFunc("/project/add", useCaseRequest(projectAddHandler)).Methods("GET")
-  r.HandleFunc("/project/add", useCaseRequest(projectAddPostHandler)).Methods("POST")
+  r.HandleFunc("/projects/upsert", useCaseRequest(projectUpsertHandler)).Methods("GET")
+  r.HandleFunc("/projects/upsert", useCaseRequest(projectUpsertPostHandler)).Methods("POST")
+  r.HandleFunc("/projects/upsert/{id}", useCaseRequest(projectUpsertHandler)).Methods("GET")
+  r.HandleFunc("/projects/upsert/{id}", useCaseRequest(projectUpsertPostHandler)).Methods("POST")
+  r.HandleFunc("/projects/delete/{id}", useCaseRequest(projectDeleteHandler)).Methods("GET")
   r.HandleFunc("/project/{id}", useCaseRequest(projectHandler)).Methods("GET")
   
   r.HandleFunc("/about", useCaseRequest(aboutHander)).Methods("GET")

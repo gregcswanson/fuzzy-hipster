@@ -3,18 +3,24 @@
 <div class="container">
 	<div class="row">
 		<div class="col-xs-12">
-			{{if .Model.Title}}
-			<h2 class="text-center">Project</h2>
-			{{else}}
-			<h2 class='text-center'>New Project</h2>
-			{{end}}
 			<form method="POST">
+        <input type="hidden" id="ID" name="ID" value="{{.Model.ID}}" />
 				<div class="form-group">
-					<label class="form-label">Title</label>
+					<label class="form-label">Project Title</label>
 					<input type="text" name="Title" id="Title" value="{{.Model.Title}}" class="form-control" />
 				</div>
-				<button type="submit" class="btn btn-default">Submit</button>
-      		</form>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-control" id="Description" name="Description" rows="3">{{.Model.Description}}</textarea>
+        </div>
+        {{if .Model.ID}}
+        <a href="/project/{{.Model.ID}}" class="btn btn-warning">Cancel</a>
+        <a href="/projects/delete/{{.Model.ID}}" class="btn btn-danger">Delete</a>
+        {{else}}
+        <a href="/projects" class="btn btn-warning">Cancel</a>
+        {{end}}
+        <button type="submit" class="btn btn-primary">Save</button>
+      </form>
 		</div>
 	</div>
 </div>

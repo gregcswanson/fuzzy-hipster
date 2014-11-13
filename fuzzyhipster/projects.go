@@ -31,7 +31,7 @@ func projectslistHandler(w http.ResponseWriter, r *http.Request, u *usecases.Int
   // build the page view model
   page := buildPage(r, u, time.Now())
   page.Model = projects
-  page.IsProjectView = true
+  page.IsProjectsView = true
   
   render(w, "projects", page)  
 }
@@ -46,34 +46,58 @@ func projectHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interact
     	return
   	}
     viewModel := &ProjectViewModel{Project: project}
-  	render(w, "project", &Page{Title: "Project", IsProjectView: true, Model: viewModel })
+  	render(w, "project", &Page{Title: "Project", IsProjectsView: true, IsProjectView: true, Model: viewModel })
 }
 
-func projectAddHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors) {  
-	log.Println("projectadd:get")
-	render(w, "projectadd", &Page{Title: "Add Project", IsProjectView: true, Model: usecases.Project{} })
+func projectUpsertHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors) {  
+  // either add or edit the project depending on if the id parameter is included
+  vars := mux.Vars(r)
+	id := vars["id"]
+  model := usecases.Project{}
+  if id != "" {
+    model, _ = u.Projects.FindByID(id)
+  }
+	log.Println("projectadd:upsert")
+	render(w, "projectadd", &Page{Title: "Project", IsProjectsView: true, Model: model })
 }
 
-func projectAddPostHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors) {  
+func projectUpsertPostHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors) {  
 	// add an error
 	log.Println("projectadd:post")
 	
 	errForm := r.ParseForm()
 	if errForm != nil {
-		render(w, "projectadd", &Page{Title: "Add Project", IsProjectView: true, Error: errForm.Error(), Model: &usecases.Project{} })
+		render(w, "projectadd", &Page{Title: "Add Project", IsProjectsView: true, IsProjectView: true, Error: errForm.Error(), Model: &usecases.Project{} })
   		return
 	}
 	
-	//r.Form.Get("")
 	// get the lines that were submitted at the same time
 		
-	project := usecases.Project{ Title: r.Form.Get("Title") } //r.FormValue("Title") } 
+  project := usecases.Project{ ID: r.Form.Get("ID"), Title: r.Form.Get("Title"), Description: r.Form.Get("Description") } 
   	createdProject, err := u.Projects.Save(project)
   	if err != nil {
-    	render(w, "projectadd", &Page{Title: "Add Project", IsProjectView: true, Error: err.Error(), Model: &usecases.Project{} })
+    	render(w, "projectadd", &Page{Title: "Project", IsProjectsView: true, IsProjectView: true, Error: err.Error(), Model: &usecases.Project{} })
   		return
   	}
   	http.Redirect(w, r, "/project/" + createdProject.ID, http.StatusFound)
+}
+
+func projectDeleteHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors) {  
+  // move the project to trash
+  vars := mux.Vars(r)
+	id := vars["id"]
+  project, _ := u.Projects.FindByID(id)
+  
+  deleteError := u.Projects.Delete(project.ID)
+  if deleteError != nil {
+    flashError(r, u.User.Current().Id, deleteError.Error())
+  }
+  
+  // set the message with undo - make a specific message type that has a link to trash
+  flashWarning(r, u.User.Current().Id, "Project '" + project.Title + "' was moved to trash")
+  
+  // redirect to projects
+  http.Redirect(w, r, "/projects", http.StatusFound)
 }
 
 func projectPostHandler() {

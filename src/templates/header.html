@@ -23,29 +23,41 @@
                         <li><a href="#">Profile</a></li>
                         </ul>
                     </li>
-                    <li>
-                       <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{.Year.Year}}</a>
-                        <ul class="dropdown-menu" role="menu">
-                        <li><a href="/month/201501">2015</a></li>
-                        <li><a href="/month/201401">2014</a></li>
-                        <li><a href="/month/201301">2013</a></li>
-                        </ul>
-                    </li>
-                    <li {{if .IsDayView}}
-                         {{else if .IsMonthView}}class="active"{{end}}>
-                      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        {{.Year.Selected.Name}}
-                      </a>
-                      <ul class="dropdown-menu" role="menu">
-                        {{range .Year.Months}}
-                        <li class="{{if .Selected}}active{{end}}">
-                          <a href="/month/{{.MonthCode}}" >
-                            {{.Name}}
-                          </a>
+                    {{if .IsProjectsView}}
+                      {{if .IsProjectView}}
+                        <li>
+                           <a href="/projects" >Projects</a>
                         </li>
-                        {{end}}
-                      </ul>
-                    </li>
+                      {{else}}
+                        <li class="active">
+                           <a href="/projects" >Projects</a>
+                        </li>
+                      {{end}}
+                    {{else}}
+                      <li>
+                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{.Year.Year}}</a>
+                          <ul class="dropdown-menu" role="menu">
+                          <li><a href="/month/201501">2015</a></li>
+                          <li><a href="/month/201401">2014</a></li>
+                          <li><a href="/month/201301">2013</a></li>
+                          </ul>
+                      </li>
+                      <li {{if .IsDayView}}
+                           {{else if .IsMonthView}}class="active"{{end}}>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                          {{.Year.Selected.Name}}
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                          {{range .Year.Months}}
+                          <li class="{{if .Selected}}active{{end}}">
+                            <a href="/month/{{.MonthCode}}" >
+                              {{.Name}}
+                            </a>
+                          </li>
+                          {{end}}
+                        </ul>
+                      </li>
+                    {{end}}
                     {{if .IsDayView}}
                     <li class="active">
                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
