@@ -73,6 +73,11 @@ func init() {
   r.HandleFunc("/projects/upsert/{id}", useCaseRequest(projectUpsertPostHandler)).Methods("POST")
   r.HandleFunc("/projects/delete/{id}", useCaseRequest(projectDeleteHandler)).Methods("GET")
   r.HandleFunc("/project/{id}", useCaseRequest(projectHandler)).Methods("GET")
+  r.HandleFunc("/project/{id}", useCaseRequest(projectPostHandler)).Methods("POST")
+  r.HandleFunc("/project/{project_id}/item/{item_id}", useCaseRequest(projectItemHandler)).Methods("GET")
+  r.HandleFunc("/project/{project_id}/item/{item_id}", useCaseRequest(projectItemPostHandler)).Methods("POST")
+  r.HandleFunc("/project/{project_id}/item/{item_id}/toggle", useCaseRequest(togglePostHandler)).Methods("POST")
+  r.HandleFunc("/project/{project_id}/item/{item_id}/delete", useCaseRequest(dayItemDeleteHandler)).Methods("GET")
   
   r.HandleFunc("/about", useCaseRequest(aboutHander)).Methods("GET")
   r.HandleFunc("/app", handlerBundleApp).Methods("GET")

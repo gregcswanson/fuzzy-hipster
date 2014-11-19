@@ -23,6 +23,16 @@ type ProjectLine struct {
   Sort int64
 }
 
+type ProjectLines []ProjectLine
+func (a ProjectLines) Find(id string) (int, error) {
+  for index, projectLine := range a {
+    if projectLine.ID == id {
+      return index, nil
+    }
+	}
+  return -1, errors.New("Not Found")
+}
+
 type ProjectInteractor struct {
 	Context interfaces.DomainContext
 }
@@ -76,8 +86,7 @@ func (interactor *ProjectInteractor) Save(project Project) (Project, error) {
 
 func (interactor *ProjectInteractor) FindByID(id string) (Project, error) {
   // get the project
-  log.Println("usecases.FindByID")
-  log.Println(id)
+  log.Println("usecases.FindByID", id)
   domainProject, err := interactor.Context.Projects.Get(id)
   if err != nil {
     return Project{}, err

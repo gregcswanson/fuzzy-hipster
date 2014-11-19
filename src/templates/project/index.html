@@ -14,12 +14,37 @@
           {{end}}
         </div>
         <hr />
+        {{range .Model.Project.Lines}}
+				  {{if eq .Status "NOTE"}}
+      					<div class='well well-sm'>
+        					<a href="/project/{{.ProjectID}}/item/{{.ID}}"><i>{{.Text}}</i></a>
+      					</div>
+          {{else if eq .Status "LABEL"}}
+        					<a href="/project/{{.ProjectID}}/item/{{.ID}}"><b>{{.Text}}</b></a><br />
+    		  {{else}}
+              <form action="/project/{{.ProjectID}}/item/{{.ID}}/toggle" method="POST" style="display: inline;">
+                <button class="btn btn-link" type="submit">
+                  {{if eq .Status "OPEN"}}
+                    <span>&#9744</span>
+                  {{else if eq .Status "DONE"}}
+                    <span>&#10003</span>
+                  {{else if eq .Status "CANCELLED"}}
+                    <span>&#10007</span>
+                  {{end}}
+                </button>
+              </form>
+      					<a href="/project/{{.ProjectID}}/item/{{.ID}}">
+        					&nbsp;{{.Text}}
+      					</a><br />
+    		  {{end}}
+			  {{end}}
         <hr />
-        <div class="form-group">
-          <input type="text" name="NewItem" id="NewItem" 
-            placeholder="What should you be doing?" 
-            class="form-control" />
-          </div>
+        <form method="POST"> 
+        <input 
+            placeholder='start with / note | . todo | * label'  
+            name='newItemText' id='newItemText'
+            class='form-control' autofocus>
+        </form>
     </div>
   </div>
 </div>

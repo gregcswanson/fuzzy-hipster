@@ -16,6 +16,7 @@ var templates = template.Must(template.ParseFiles(
 	"src/templates/projects.html",
 	"src/templates/project/add.html",
   "src/templates/project/index.html",
+  "src/templates/project/line/edit.html",
   "src/templates/day/edit.html",
   "src/templates/month.html",
   "src/templates/partials/months.html",
