@@ -39,20 +39,19 @@
                       <li>
                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{.Year.Year}}</a>
                           <ul class="dropdown-menu" role="menu">
-                          <li><a href="/month/201501">2015</a></li>
-                          <li><a href="/month/201401">2014</a></li>
-                          <li><a href="/month/201301">2013</a></li>
+                          <li><a href="/month/201501/overview">2015</a></li>
+                          <li><a href="/month/201401/overview">2014</a></li>
+                          <li><a href="/month/201301/overview">2013</a></li>
                           </ul>
                       </li>
-                      <li {{if .IsDayView}}
-                           {{else if .IsMonthView}}class="active"{{end}}>
+                      <li>
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                           {{.Year.Selected.Name}}
                         </a>
                         <ul class="dropdown-menu" role="menu">
                           {{range .Year.Months}}
                           <li class="{{if .Selected}}active{{end}}">
-                            <a href="/month/{{.MonthCode}}" >
+                            <a href="/month/{{.MonthCode}}/overview" >
                               {{.Name}}
                             </a>
                           </li>
@@ -66,11 +65,40 @@
                          {{.Month.SelectedDay.Name}}
                       </a>
                       <ul class="dropdown-menu" role="menu">
-                        <li><a href="/month/{{.Year.Selected.MonthCode}}">Overview</a></li>
-                        <li><a href="#">Month Tasks</a></li>
+                        <li><a href="/month/{{.Year.Selected.MonthCode}}/overview">Overview</a></li>
+                        <li><a href="/month/{{.Year.Selected.MonthCode}}/items">Month Tasks</a></li>
                         <li class="divider"></li>
                         {{range .Month.Days}}
                         <li {{if .Selected}}class="active"{{end}}>
+                          <a href="/day/{{.DateAsString}}">{{.Name}}</a>
+                        </li>
+                        {{end}}
+                      </ul>
+                    </li>
+                    {{end}}
+                    {{if .IsMonthOverView}}
+                     <li class="active">
+                       <a href="#" class="dropdown-toggle" data-toggle="dropdown">Overview</a>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a href="/month/{{.Year.Selected.MonthCode}}/overview" class="active">Overview</a></li>
+                        <li><a href="/month/{{.Year.Selected.MonthCode}}/items">Month Tasks</a></li>
+                        <li class="divider"></li>
+                        {{range .Month.Days}}
+                        <li>
+                          <a href="/day/{{.DateAsString}}">{{.Name}}</a>
+                        </li>
+                        {{end}}
+                      </ul>
+                    </li>
+                    {{else if .IsMonthView}}
+                     <li class="active">
+                       <a href="#" class="dropdown-toggle" data-toggle="dropdown">Month Tasks</a>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a href="/month/{{.Year.Selected.MonthCode}}/overview">Overview</a></li>
+                        <li><a href="/month/{{.Year.Selected.MonthCode}}/items" class="active">Month Tasks</a></li>
+                        <li class="divider"></li>
+                        {{range .Month.Days}}
+                        <li>
                           <a href="/day/{{.DateAsString}}">{{.Name}}</a>
                         </li>
                         {{end}}

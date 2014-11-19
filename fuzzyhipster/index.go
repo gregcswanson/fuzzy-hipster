@@ -70,7 +70,7 @@ func dayHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors)
   page.Title = "Index"
   page.Model = indexPage
   page.IsDayView = true
-  page.IsMonthView = true
+  //page.IsMonthView = true
   
 	render(w, "index", page)  
 }

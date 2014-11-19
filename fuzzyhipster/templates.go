@@ -18,7 +18,8 @@ var templates = template.Must(template.ParseFiles(
   "src/templates/project/index.html",
   "src/templates/project/line/edit.html",
   "src/templates/day/edit.html",
-  "src/templates/month.html",
+  "src/templates/month/overview.html",
+  "src/templates/month/items.html",
   "src/templates/partials/months.html",
   "src/templates/partials/leftnavigation.html",
 	"src/templates/about.html")).Funcs(template.FuncMap(map[string]interface{}{"eq": eq}))
@@ -28,6 +29,7 @@ type Page struct {
 	Title string
 	IsDayView bool
 	IsMonthView bool
+	IsMonthOverView bool
 	IsProjectsView bool
 	IsProjectView bool
 	IsAboutView bool
