@@ -11,6 +11,7 @@ type Interactors struct {
   Lists       ListInteractor 
   User        UserInteractor
   DayItems    DayItemInteractor
+  MonthItems  MonthItemInteractor
 }
 
 type ListInteractor struct {
@@ -36,6 +37,9 @@ func NewInteractors(request *http.Request, namespace string) *Interactors {
   
   interactors.DayItems = DayItemInteractor{}
   interactors.DayItems.Context = *context
+  
+  interactors.MonthItems = MonthItemInteractor{}
+  interactors.MonthItems.Context = *context
   
 	return interactors
 }

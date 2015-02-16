@@ -1,13 +1,18 @@
 {{define "monthoverview"}}
 {{template "header" .}}
 <div class="container">
-	<div class="row">
-    <div class="col-xs-12">
+  <div class="row">
+    <div class="col-xs-11">
       <div class="list-group left">
         {{range .Model.Month.Days}}
-          <a href="/day/{{.DateAsString}}" class="list-group-item {{if .HasOpenItems}}list-group-item-warning{{else if .HasItems}}list-group-item-info{{end}}">{{.Display}}</a>
-        {{end}}
+        <a href="/day/{{.DateAsString}}" class="list-group-item {{if .HasOpenItems}}list-group-item-warning{{else if .HasItems}}list-group-item-info{{end}}">{{.Display}}</a>
+        {{end}} 
       </div>
     </div>
+    <div class="col-xs-1 right">
+      <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
+    </div>
+  </div>
+</div>
 {{template "footer" .}}
 {{end}}

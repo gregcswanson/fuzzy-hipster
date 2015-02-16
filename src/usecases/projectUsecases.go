@@ -6,6 +6,7 @@ import (
   "time"
   "errors"
   "log"
+  "sort"
 )
 
 type Project struct {
@@ -98,12 +99,35 @@ func (interactor *ProjectInteractor) FindByID(id string) (Project, error) {
   var projectLines []ProjectLine
 	projectLines = make([]ProjectLine, len(lines))
 	for i, projectLine := range lines {
-		projectLines[i] = ProjectLine{projectLine.ID, projectLine.ProjectID, projectLine.Status, projectLine.Text, projectLine.Sort}
+		projectLines[i] = ProjectLine{
+      projectLine.ID, 
+      projectLine.ProjectID, 
+      projectLine.Status, 
+      projectLine.Text, 
+      projectLine.Sort,
+    }
 	}
   
 	// Copy to the use case model
   project := Project{domainProject.ID, domainProject.Title, domainProject.Description, projectLines}
 	return project, nil
+}
+
+func (interactor *ProjectInteractor) FindItemById(id string) (ProjectLine, error) {
+  line, err := interactor.Context.ProjectItems.Get(id)
+	if err != nil {
+    return ProjectLine{}, err
+  }
+  // Copy to the use case model
+  projectLine := ProjectLine{
+      line.ID, 
+      line.ProjectID, 
+      line.Status, 
+      line.Text, 
+      line.Sort,
+  }
+  
+	return projectLine, nil
 }
 
 func (interactor *ProjectInteractor) SaveItem(id string, line ProjectLine) (ProjectLine, error) {
@@ -150,6 +174,65 @@ func (interactor *ProjectInteractor) SaveItem(id string, line ProjectLine) (Proj
 	return line, err
 }
 
+func (interactor *ProjectInteractor) SaveItem2(projectLine ProjectLine) (ProjectLine, error) {
+  
+	// validate 
+	if projectLine.Text == "" {
+		err := errors.New("Text is required")
+		return projectLine, err
+	}
+  
+  // get the lines for the project
+  lines, errFind := interactor.Context.ProjectItems.Find(projectLine.ProjectID)
+  if errFind != nil {
+    return projectLine, errFind
+  }
+	
+  // either save or create
+  if projectLine.ID != "" {
+    // get the current entity
+    i, findError := domain.ProjectItems(lines).Find(projectLine.ID)
+    if findError != nil {
+      return projectLine, findError
+    }
+    if(lines[i].Sort < projectLine.Sort ) {
+      lines[i].Sort = projectLine.Sort + 5
+    }else if (lines[i].Sort > projectLine.Sort) {
+      lines[i].Sort = projectLine.Sort - 5
+    }    
+	  lines[i].Status = projectLine.Status 
+    lines[i].Text = projectLine.Text
+  } else {
+    // setup the new record
+    entity := domain.ProjectItem{}
+    entity.ProjectID = projectLine.ProjectID
+    entity.Start = time.Now()
+    entity.End = time.Now()
+    entity.Duration = 0
+	  entity.Status = projectLine.Status
+    entity.Text = projectLine.Text
+    entity.Sort = time.Now().Unix()
+    lines = append(lines, entity)
+  }
+  
+  sort.Sort(domain.ProjectItemBySort(lines))
+    var position int64 
+    for _, otherItem := range lines {
+      position = position + 10
+      otherItem.Sort = position
+      storedEntity, err := interactor.Context.ProjectItems.Store(otherItem)
+      if err == nil {
+        if(projectLine.ID == ""){
+          projectLine.ID = storedEntity.ID
+        }
+	    } else {
+        log.Println("ERROR",err.Error())
+      }
+	  }
+	
+	return projectLine, nil
+}
+
 func (interactor *ProjectInteractor) DeleteItem(id string) (error) {
     
     foundEntity, err := interactor.Context.ProjectItems.Get(id)
@@ -183,7 +266,19 @@ func (interactor *ProjectInteractor) Delete(id string) (error) {
   return deleteError
 }
 
-// SaveLine
-// DeleteLine
-
+func (interactor *ProjectInteractor) Toggle(itemId string) error {
+  item, err := interactor.Context.ProjectItems.Get(itemId)
+  if err != nil {
+    return err
+  }
+  if item.Status == "OPEN" {
+    item.Status = "DONE"
+  } else if item.Status == "DONE" {
+    item.Status = "CANCELLED"
+  } else if item.Status == "CANCELLED" {
+    item.Status = "OPEN"
+  }
+  _ , errSave := interactor.Context.ProjectItems.Store(item)
+  return  errSave
+}
 

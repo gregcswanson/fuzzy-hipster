@@ -65,14 +65,13 @@ func initRouter() {
   r.HandleFunc("/project/{id}", useCaseRequest(projectPostHandler)).Methods("POST")
   r.HandleFunc("/project/{project_id}/item/{item_id}", useCaseRequest(projectItemHandler)).Methods("GET")
   r.HandleFunc("/project/{project_id}/item/{item_id}", useCaseRequest(projectItemPostHandler)).Methods("POST")
-  r.HandleFunc("/project/{project_id}/item/{item_id}/toggle", useCaseRequest(togglePostHandler)).Methods("POST")
-  r.HandleFunc("/project/{project_id}/item/{item_id}/delete", useCaseRequest(dayItemDeleteHandler)).Methods("GET")
+  r.HandleFunc("/project/{project_id}/item/{item_id}/toggle", useCaseRequest(projectItemTogglePostHandler)).Methods("POST")
+  r.HandleFunc("/project/{project_id}/item/{item_id}/delete", useCaseRequest(projectItemDeleteHandler)).Methods("GET")
   
   r.HandleFunc("/about", useCaseRequest(aboutHander)).Methods("GET")
   r.HandleFunc("/app", handlerBundleApp).Methods("GET")
   r.HandleFunc("/logout", logout).Methods("GET")
-  r.HandleFunc("/emberapp", authenticate(handlerBundle)).Methods("GET")
-  // Everything else fails.
+  r.HandleFunc("/emberapp", authenticate(handlerBundle)).Methods("GET")  
   //r.HandleFunc("/{path:.*}", pageNotFound)
   http.Handle("/", r)  
 }

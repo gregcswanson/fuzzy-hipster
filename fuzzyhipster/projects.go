@@ -1,15 +1,12 @@
 package fuzzyhipster
 
 import (
-  //"fmt"
   "net/http"
   "src/usecases"
   "time"
   "log"
   "strings"
-  //"errors"
-  //"strconv"
-  //"encoding/json"
+  "strconv"
   "vendor/github.com/gorilla/mux"
 )
 
@@ -143,7 +140,7 @@ func projectPostHandler(w http.ResponseWriter, r *http.Request, u *usecases.Inte
   log.Println("new line item:", text)
 			
   projectItem := usecases.ProjectLine{ ProjectID: id, Text: text, Sort: 0, Status: status } 
-  _, err := u.Projects.SaveItem(id, projectItem)
+  _, err := u.Projects.SaveItem2(projectItem)
   if err != nil {
     flashError(r, u.User.Current().Id ,err.Error())
   } 
@@ -195,35 +192,59 @@ func projectItemPostHandler(w http.ResponseWriter, r *http.Request, u *usecases.
 	// add an error
 	vars := mux.Vars(r)
 	projectId := vars["project_id"]
-  /*itemId := vars["item_id"]
+  itemId := vars["item_id"]
   
 	errForm := r.ParseForm()
 	if errForm != nil {
     flashError(r, u.User.Current().Id , errForm.Error())
-		http.Redirect(w, r, "/", http.StatusFound)
+		http.Redirect(w, r, "/project/" + projectId, http.StatusFound)
   	return
 	}
   
-  dayItem, err := u.DayItems.FindById(itemId)
+  line, err := u.Projects.FindItemById(itemId)
   if err != nil {
     flashError(r, u.User.Current().Id, err.Error())
-		http.Redirect(w, r, "/", http.StatusFound)
+		http.Redirect(w, r, "/project/" + projectId, http.StatusFound)
     return
   }
   
-  log.Println(dayItem.Sort)
-  dayItem.Text = r.Form.Get("Text")
-  dayItem.Status = r.Form.Get("Status")
-  log.Println(r.Form.Get("Status"))
-  log.Println(r.Form.Get("Sort"))
+  line.Text = r.Form.Get("Text")
+  line.Status = r.Form.Get("Status")
   sort, _ := strconv.Atoi(r.Form.Get("Sort"))
-  dayItem.Sort = int64(sort)
-  log.Println(dayItem.Sort)
+  line.Sort = int64(sort)
   
-  _, errSave := u.DayItems.Save(dayItem)
+  _, errSave := u.Projects.SaveItem2(line)
   if errSave != nil {
     flashError(r, u.User.Current().Id, err.Error())
   }
-  */  
+    
+  http.Redirect(w, r, "/project/" + projectId, http.StatusFound)
+}
+
+func projectItemTogglePostHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors) {  
+	// add an error
+	vars := mux.Vars(r)
+	projectId := vars["project_id"]
+  itemId := vars["item_id"]
+  
+  err := u.Projects.Toggle(itemId)
+  if err != nil {
+    flashError(r, u.User.Current().Id, err.Error())
+  }
+    
+  http.Redirect(w, r, "/project/" + projectId, http.StatusFound)
+}
+
+func projectItemDeleteHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors) {  
+	// add an error
+	vars := mux.Vars(r)
+	projectId := vars["project_id"]
+  itemId := vars["item_id"]
+  
+  err := u.Projects.DeleteItem(itemId)
+  if err != nil {
+    flashError(r, u.User.Current().Id, err.Error())
+  }
+    
   http.Redirect(w, r, "/project/" + projectId, http.StatusFound)
 }
