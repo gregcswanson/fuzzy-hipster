@@ -53,7 +53,12 @@ func initRouter() {
   r.HandleFunc("/day/{day_id}/item/{item_id}/delete", useCaseRequest(dayItemDeleteHandler)).Methods("GET")
   
   r.HandleFunc("/month/{month_id}/items", useCaseRequest(monthItemsHandler)).Methods("GET")
+  r.HandleFunc("/month/{month_id}/items", useCaseRequest(monthItemsPostHandler)).Methods("POST")
   r.HandleFunc("/month/{month_id}/overview", useCaseRequest(monthOverviewHandler)).Methods("GET")
+  r.HandleFunc("/month/{month_id}/item/{item_id}", useCaseRequest(monthItemHandler)).Methods("GET")
+  r.HandleFunc("/month/{month_id}/item/{item_id}", useCaseRequest(monthItemPostHandler)).Methods("POST")
+  r.HandleFunc("/month/{month_id}/item/{item_id}/toggle", useCaseRequest(monthItemTogglePostHandler)).Methods("POST")
+  r.HandleFunc("/month/{month_id}/item/{item_id}/delete", useCaseRequest(monthItemDeleteHandler)).Methods("GET")
   
   r.HandleFunc("/projects", useCaseRequest(projectslistHandler)).Methods("GET")
   r.HandleFunc("/projects/upsert", useCaseRequest(projectUpsertHandler)).Methods("GET")

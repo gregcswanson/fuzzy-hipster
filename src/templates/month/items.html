@@ -1,9 +1,41 @@
 {{define "monthitems"}}
 {{template "header" .}}
+
 <div class="container">
 	<div class="row">
     <div class="col-xs-12">
-      <h3>month items</h3>
-    </div>
+			{{range .Model.MonthItems}}
+				{{if eq .Status "NOTE"}}
+      					<div class='well well-sm'>
+        					<a href="/month/{{$.Model.MonthID}}/item/{{.ID}}"><i>{{.Text}}</i></a>
+      					</div>
+        {{else if eq .Status "LABEL"}}
+        					<a href="/month/{{$.Model.MonthID}}/item/{{.ID}}"><b>{{.Text}}</b></a><br />
+    		{{else}}
+              <form action="/month/{{$.Model.MonthID}}/item/{{.ID}}/toggle" method="POST" style="display: inline;">
+                <button class="btn btn-link" type="submit">
+                  {{if eq .Status "OPEN"}}
+                    <span>&#9744</span>
+                  {{else if eq .Status "DONE"}}
+                    <span>&#10003</span>
+                  {{else if eq .Status "CANCELLED"}}
+                    <span>&#10007</span>
+                  {{end}}
+                </button>
+              </form>
+      					<a href="/month/{{$.Model.MonthID}}/item/{{.ID}}">
+        					&nbsp;{{.Text}}
+      					</a><br />
+    		{{end}}
+			{{end}}
+  <hr />
+  <form method="POST"> 
+        <input 
+            placeholder='start with / note | . todo | * label'  
+            name='newItemText' id='newItemText'
+            class='form-control' autofocus>
+  </form>
+</div>
+
 {{template "footer" .}}
 {{end}}
