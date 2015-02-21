@@ -67,6 +67,8 @@ func (interactor *MonthItemInteractor) Toggle(itemId string) error {
   if monthItem.Status == "OPEN" {
     monthItem.Status = "DONE"
   } else if monthItem.Status == "DONE" {
+    monthItem.Status = "MOVED"
+  } else if monthItem.Status == "MOVED" {
     monthItem.Status = "CANCELLED"
   } else if monthItem.Status == "CANCELLED" {
     monthItem.Status = "OPEN"

@@ -4,6 +4,9 @@
 <div class="container">
 	<div class="row">
     <div class="col-xs-12">
+      <h6>{{.Year.Selected.Name}} {{.Year.Year}}</h6>
+      <div class="panel panel-default">
+        <div class="panel-body">
 			{{range .Model.MonthItems}}
 				{{if eq .Status "NOTE"}}
       					<div class='well well-sm'>
@@ -11,15 +14,21 @@
       					</div>
         {{else if eq .Status "LABEL"}}
         					<a href="/month/{{$.Model.MonthID}}/item/{{.ID}}"><b>{{.Text}}</b></a><br />
+        {{else if eq .Status "MEETING"}}
+          <button class="btn btn-link">
+            <span class="glyphicon glyphicon-user"></span>
+          </button>&nbsp;<a href="/month/{{$.Model.MonthID}}/item/{{.ID}}"><b>{{.Text}}</b></a><br />
     		{{else}}
               <form action="/month/{{$.Model.MonthID}}/item/{{.ID}}/toggle" method="POST" style="display: inline;">
                 <button class="btn btn-link" type="submit">
-                  {{if eq .Status "OPEN"}}
-                    <span>&#9744</span>
+                   {{if eq .Status "OPEN"}}
+                    <span class="glyphicon glyphicon-unchecked"></span>
                   {{else if eq .Status "DONE"}}
-                    <span>&#10003</span>
+                    <span class="glyphicon glyphicon-ok"></span>
                   {{else if eq .Status "CANCELLED"}}
-                    <span>&#10007</span>
+                    <span class="glyphicon glyphicon-remove"></span>
+                  {{else if eq .Status "MOVED"}}
+                    <span class="glyphicon glyphicon-chevron-right"></span>
                   {{end}}
                 </button>
               </form>
@@ -28,13 +37,16 @@
       					</a><br />
     		{{end}}
 			{{end}}
-  <hr />
+   </div>
+        <div class="panel-footer">
   <form method="POST"> 
         <input 
-            placeholder='start with / note | . todo | * label'  
+            placeholder='start with / note | . todo | * label | # meeting '  
             name='newItemText' id='newItemText'
             class='form-control' autofocus>
   </form>
+        </div>
+      </div>
 </div>
 
 {{template "footer" .}}

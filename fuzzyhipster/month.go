@@ -117,6 +117,9 @@ func monthItemsPostHandler(w http.ResponseWriter, r *http.Request, u *usecases.I
   } else if strings.HasPrefix(text, "*") {
     text = strings.TrimPrefix(text, "*")
     status = "LABEL"
+  } else if strings.HasPrefix(text, "#") {
+    text = strings.TrimPrefix(text, "#")
+    status = "MEETING"
   }
   		
   monthItem := usecases.MonthItem{ Month: int(selectedDate.Month()), Year: selectedDate.Year(), Text: text, Sort: 0, Status: status } 
@@ -139,7 +142,7 @@ func monthItemTogglePostHandler(w http.ResponseWriter, r *http.Request, u *useca
     flashError(r, u.User.Current().Id, err.Error())
   }
     
-  http.Redirect(w, r, "/month/" + id, http.StatusFound)
+  http.Redirect(w, r, "/month/" + id + "/items", http.StatusFound)
 }
 
 func monthItemHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors) {

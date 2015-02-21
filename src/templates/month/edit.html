@@ -1,9 +1,15 @@
 {{define "monthedit"}}
 {{template "header" .}}
-<div class="container">
-	<div class="row">
-		<div class="col-md-offset-3 col-xs-6">
+<div class="modal fade in" style="display: block";>
 			<form method="POST">
+  <div class="modal-backdrop fade in" style="bottom: 0; z-index: 0;"></div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <a type="button" href="/month/{{.Model.MonthID}}/items" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></a>
+        <h4 class="modal-title">Edit</h4>
+      </div>
+      <div class="modal-body">
 				<div class="form-group">
 					<label class="form-label">Text</label>
 					<input type="text" name="Text" id="Text" value="{{.Model.Item.Text}}" class="form-control"  autofocus>
@@ -17,11 +23,17 @@
           <label class="btn btn-default {{if eq .Model.Item.Status "DONE"}}active{{end}}">
             <input type="radio" name="Status" id="Status" value="DONE" {{if eq .Model.Item.Status "DONE"}}checked{{end}}><span>Done</span>
           </label>
+          <label class="btn btn-default {{if eq .Model.Item.Status "MOVED"}}active{{end}}">
+            <input type="radio" name="Status" id="Status" value="MOVED" {{if eq .Model.Item.Status "MOVED"}}checked{{end}}><span>Moved</span>
+          </label>
           <label class="btn btn-default {{if eq .Model.Item.Status "CANCELLED"}}active{{end}}">
             <input type="radio" name="Status" id="Status" value="CANCELLED" {{if eq .Model.Item.Status "CANCELLED"}}checked{{end}}><span>Cancel</span>
           </label>
           <label class="btn btn-default {{if eq .Model.Item.Status "NOTE"}}active{{end}}">
             <input type="radio" name="Status" id="Status" value="NOTE" {{if eq .Model.Item.Status "NOTE"}}checked{{end}}><span>Note</span>
+          </label>
+          <label class="btn btn-default {{if eq .Model.Item.Status "MEETING"}}active{{end}}">
+            <input type="radio" name="Status" id="Status" value="MEETING" {{if eq .Model.Item.Status "MEETING"}}checked{{end}}><span>Meeting</span>
           </label>
           <label class="btn btn-default {{if eq .Model.Item.Status "LABEL"}}active{{end}}">
             <input type="radio" name="Status" id="Status" value="LABEL" {{if eq .Model.Item.Status "LABEL"}}checked{{end}}><span>Label</span>
@@ -36,18 +48,16 @@
             {{end}}
           </select>
         </div>
-        <hr />
-        <div class="row">        
-          <div class="col-xs-12">
-          <a href="/month/{{.Model.MonthID}}/items">Cancel</a>
-          <a href="#" class="btn btn-warning">Move</a>
-          <a href="/month/{{.Model.MonthID}}/item/{{.Model.Item.ID}}/delete" class="btn btn-danger">Delete</a>
-          <button type="submit" class="btn btn-success">Save</button>
-          </div>
-        </div>
-      </form>
 		</div>
-	</div>
-</div>
+      <div class="modal-footer">
+          <a href="#" class="btn btn-warning">Move</a>
+           <a href="/month/{{.Model.MonthID}}/item/{{.Model.Item.ID}}/delete" class="btn btn-danger">Delete</a>
+          <button type="submit" class="btn btn-success">Save</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+        
+      </form>
+</div><!-- /.modal -->
 {{template "footer" .}}
 {{end}}

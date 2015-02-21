@@ -3,22 +3,32 @@
 <div class="container">
 	<div class="row">
     <div class="col-xs-12">
+      <h6>{{.Month.SelectedDay.Name}} {{.Year.Selected.Name}} {{.Year.Year}}</h6>
+      <div class="panel panel-default">
+        <div class="panel-body">
+      
 			{{range .Model.DayItems}}
 				{{if eq .Status "NOTE"}}
       					<div class='well well-sm'>
         					<a href="/day/{{.Day}}/item/{{.ID}}"><i>{{.Text}}</i></a>
       					</div>
         {{else if eq .Status "LABEL"}}
-        					<a href="/day/{{.Day}}/item/{{.ID}}"><b>{{.Text}}</b></a><br />
+          <a href="/day/{{.Day}}/item/{{.ID}}"><b>{{.Text}}</b></a><br />
+        {{else if eq .Status "MEETING"}}
+          <button class="btn btn-link">
+            <span class="glyphicon glyphicon-user"></span>
+          </button>&nbsp;<a href="/day/{{.Day}}/item/{{.ID}}"><b>{{.Text}}</b></a><br />
     		{{else}}
               <form action="/day/{{.Day}}/item/{{.ID}}/toggle" method="POST" style="display: inline;">
                 <button class="btn btn-link" type="submit">
                   {{if eq .Status "OPEN"}}
-                    <span>&#9744</span>
+                    <span class="glyphicon glyphicon-unchecked"></span>
                   {{else if eq .Status "DONE"}}
-                    <span>&#10003</span>
+                    <span class="glyphicon glyphicon-ok"></span>
                   {{else if eq .Status "CANCELLED"}}
-                    <span>&#10007</span>
+                    <span class="glyphicon glyphicon-remove"></span>
+                  {{else if eq .Status "MOVED"}}
+                    <span class="glyphicon glyphicon-chevron-right"></span>
                   {{end}}
                 </button>
               </form>
@@ -27,19 +37,19 @@
       					</a><br />
     		{{end}}
 			{{end}}
-  <hr />
-  <form method="POST"> 
+  
+    
+  </div>
+        <div class="panel-footer">
+          <form method="POST"> 
         <input 
-            placeholder='start with / note | . todo | * label'  
+            placeholder='start with / note | . todo | * label | # meeting'
             name='newItemText' id='newItemText'
             class='form-control' autofocus>
   </form>
-  <hr />
-    <div class='well'>
-      <h4>To Do</h4>
-      <ol>
-        <li>Progressive Enhancement: Click to update type, check on change of text, popup add, material design multi button options</li>
-      </ol>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 {{template "footer" .}}

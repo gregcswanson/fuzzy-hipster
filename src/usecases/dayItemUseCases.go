@@ -102,8 +102,10 @@ func (interactor *DayItemInteractor) Toggle(itemId string) error {
   if dayItem.Status == "OPEN" {
     dayItem.Status = "DONE"
   } else if dayItem.Status == "DONE" {
+    dayItem.Status = "MOVED"
+  } else if dayItem.Status == "MOVED" {
     dayItem.Status = "CANCELLED"
-  } else if dayItem.Status == "CANCELLED" {
+  }  else if dayItem.Status == "CANCELLED" {
     dayItem.Status = "OPEN"
   }
   _ , errSave := interactor.Context.DayItems.Store(dayItem)

@@ -25,11 +25,13 @@
               <form action="/project/{{.ProjectID}}/item/{{.ID}}/toggle" method="POST" style="display: inline;">
                 <button class="btn btn-link" type="submit">
                   {{if eq .Status "OPEN"}}
-                    <span>&#9744</span>
+                    <span class="glyphicon glyphicon-unchecked"></span>
                   {{else if eq .Status "DONE"}}
-                    <span>&#10003</span>
+                    <span class="glyphicon glyphicon-ok"></span>
                   {{else if eq .Status "CANCELLED"}}
-                    <span>&#10007</span>
+                    <span class="glyphicon glyphicon-remove"></span>
+                  {{else if eq .Status "MOVED"}}
+                    <span class="glyphicon glyphicon-chevron-right"></span>
                   {{end}}
                 </button>
               </form>

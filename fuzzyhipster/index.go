@@ -106,6 +106,9 @@ func dayPostHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interact
   } else if strings.HasPrefix(text, "*") {
     text = strings.TrimPrefix(text, "*")
     status = "LABEL"
+  } else if strings.HasPrefix(text, "#") {
+    text = strings.TrimPrefix(text, "#")
+    status = "MEETING"
   }
 			
   dayItem := usecases.DayItem{ Day: dateAsInt, Text: text, Sort: 0, Status: status } 
