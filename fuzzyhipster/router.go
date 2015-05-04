@@ -52,6 +52,7 @@ func initRouter() {
   r.HandleFunc("/day/{day_id}/item/{item_id}/toggle", useCaseRequest(togglePostHandler)).Methods("POST")
   r.HandleFunc("/day/{day_id}/item/{item_id}/delete", useCaseRequest(dayItemDeleteHandler)).Methods("GET")
   
+  r.HandleFunc("/month/{month_id}", useCaseRequest(monthHandler)).Methods("GET")
   r.HandleFunc("/month/{month_id}/items", useCaseRequest(monthItemsHandler)).Methods("GET")
   r.HandleFunc("/month/{month_id}/items", useCaseRequest(monthItemsPostHandler)).Methods("POST")
   r.HandleFunc("/month/{month_id}/overview", useCaseRequest(monthOverviewHandler)).Methods("GET")

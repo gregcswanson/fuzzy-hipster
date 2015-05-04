@@ -7,18 +7,20 @@
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
     <link rel="stylesheet" href="/stylesheets/bootstrap-theme.min.css" />
     <link rel="stylesheet" href="/stylesheets/vendor/bootstrap-tagsinput/bootstrap-tagsinput.css" />
+    <link rel="stylesheet" href="/stylesheets/vendor/jquery.sidr.dark.css" />
     <script src='/js/jquery.js'></script>
     <script src='/js/bootstrap.js'></script>
     <script src='/js/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js'></script>
+    <script src='/js/vendor/jquery.sidr.min.js'></script>
 </head>
 <body>
 	<div class="row-fluid">
-        <div class="navbar navbar-default">
+    <div class="navbar navbar-default">
             <div class="container">
               <div class="navbar-inner">
                   <ul class='nav navbar-nav'>
                   	<li>
-                       <a href="#" class="dropdown-toggle" data-toggle="dropdown">Jot down today <span class="caret"></span></a>
+                       <a id="simple-menu" href="#sidr" class="dropdown-toggle" data-toggle="dropdown">Jot down today <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
                         <li><a href="/">Today</a></li>
                         <li><a href="/projects">Projects</a></li>
@@ -51,7 +53,7 @@
                         <ul class="dropdown-menu" role="menu">
                           {{range .Year.Months}}
                           <li class="{{if .Selected}}active{{end}}">
-                            <a href="/month/{{.MonthCode}}/overview" >
+                            <a href="/month/{{.MonthCode}}" >
                               {{.Name}}
                             </a>
                           </li>
@@ -109,8 +111,16 @@
               </div>
             </div>
         </div>
-      </div>
-      
+  </div>
+    
+  <div id="sidr">
+    <ul>
+      <li><a href="#">List 1</a></li>
+      <li class="active"><a href="#">List 2</a></li>
+      <li><a href="#">List 3</a></li>
+    </ul>
+  </div>
+  
   {{if .Error}}
     <div class="container">
       <div class="alert alert-danger alert-dismissible" role="alert">
