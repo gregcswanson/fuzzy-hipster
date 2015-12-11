@@ -14,8 +14,9 @@ import (
 type IndexPage struct {
 	DateAsInt int
 	DateDisplay string
-  Year usecases.Year
-  Month usecases.Month
+  	Year usecases.Year
+  	Month usecases.Month
+  	Summmary string
 	DayItems []usecases.DayItem
 }
 
@@ -40,20 +41,23 @@ func indexHander(w http.ResponseWriter, r *http.Request, u *usecases.Interactors
 func dayHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors) {  
 	// get the current day
   
-  vars := mux.Vars(r)
+  	vars := mux.Vars(r)
 	id := vars["day_id"]
   
-  selectedDate, _ := time.Parse("20060102", id)
-  dateAsInt, errDay := strconv.Atoi(id)
-  if errDay != nil {
-    http.Redirect(w, r, "/", http.StatusFound)
-    return
-  }
-  indexPage := &IndexPage{ DateAsInt: dateAsInt, DateDisplay: id } 
+  	selectedDate, _ := time.Parse("20060102", id)
+  	dateAsInt, errDay := strconv.Atoi(id)
+  	if errDay != nil {
+    	http.Redirect(w, r, "/", http.StatusFound)
+    	return
+  	}
+  	indexPage := &IndexPage{ DateAsInt: dateAsInt, DateDisplay: id } 
 
-  // get the month summary
-  indexPage.Month, _ = u.DayItems.FindMonth(selectedDate)
-  indexPage.Year, _ = u.DayItems.FindYear(selectedDate)
+	// get the day summary
+	
+
+  	// get the month summary
+  	indexPage.Month, _ = u.DayItems.FindMonth(selectedDate)
+  	indexPage.Year, _ = u.DayItems.FindYear(selectedDate)
   
 	// get the items for the current day
 	dayItems, err1 := u.DayItems.FindByDay(dateAsInt)
@@ -65,12 +69,12 @@ func dayHandler(w http.ResponseWriter, r *http.Request, u *usecases.Interactors)
   	} 
   	indexPage.DayItems = dayItems
   
-  // setup the master page
-  page := buildPage(r, u, selectedDate)
-  page.Title = "Index"
-  page.Model = indexPage
-  page.IsDayView = true
-  //page.IsMonthView = true
+  	// setup the master page
+  	page := buildPage(r, u, selectedDate)
+  	page.Title = "Index"
+  	page.Model = indexPage
+  	page.IsDayView = true
+  	//page.IsMonthView = true
   
 	render(w, "index", page)  
 }

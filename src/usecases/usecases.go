@@ -11,6 +11,7 @@ type Interactors struct {
   Lists       ListInteractor 
   User        UserInteractor
   DayItems    DayItemInteractor
+  DaySummaries DaySummaryInteractor
   MonthItems  MonthItemInteractor
 }
 
@@ -23,23 +24,26 @@ type List struct {
 }
 
 func NewInteractors(request *http.Request, namespace string) *Interactors {
-  context := interfaces.NewDomainContext(request, namespace)
-  interactors := new(Interactors)
+  	context := interfaces.NewDomainContext(request, namespace)
+  	interactors := new(Interactors)
   
-  interactors.User = UserInteractor{}
-  interactors.User.Context = *context
+  	interactors.User = UserInteractor{}
+  	interactors.User.Context = *context
   
 	interactors.Lists = ListInteractor{}
 	interactors.Lists.Context = *context
   
-  interactors.Projects = ProjectInteractor{}
-  interactors.Projects.Context = *context
+  	interactors.Projects = ProjectInteractor{}
+  	interactors.Projects.Context = *context
   
-  interactors.DayItems = DayItemInteractor{}
-  interactors.DayItems.Context = *context
+  	interactors.DayItems = DayItemInteractor{}
+  	interactors.DayItems.Context = *context
   
-  interactors.MonthItems = MonthItemInteractor{}
-  interactors.MonthItems.Context = *context
+  	interactors.DaySummaries = DaySummaryInteractor{}
+  	interactors.DaySummaries.Context = *context
+  
+  	interactors.MonthItems = MonthItemInteractor{}
+  	interactors.MonthItems.Context = *context
   
 	return interactors
 }

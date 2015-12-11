@@ -24,35 +24,41 @@ func (repository *DayItemRepository) Store(item domain.DayItem) (domain.DayItem,
 	globalContext := appengine.NewContext(repository.request)
   c, _ := appengine.Namespace(globalContext, repository.namespace)
   
-    // Add default values
-  if item.Sort == 0 {
-    item.Sort = time.Now().Unix()
-  }
+  // get the user ancestor key
+  userKey := datastore.NewKey(c, "User", repository.namespace, 0, nil)
   
-  if item.ID != "" {
-    //log.Println("Update Day Record")
-    //log.Println(item.ID)
-		// update
-		key , err := datastore.DecodeKey(item.ID)
-		if err != nil {
-			return item, err
-		}
-    //log.Println(key)
-		_, err = datastore.Put(c, key, &item)
-    	if err != nil {
-			return item, err
-		}
-	} else {
-    //log.Println("Create Day Record")
-		// new
-		key, err := datastore.Put(c, datastore.NewIncompleteKey(c, "DayItems", nil), &item)
-    	if err != nil {
-        	return item, err
-    	} else {
-    		item.ID = key.Encode()
-    	}
-	}
-	return item, nil
+  // transaction, do not return until the data is completed
+	//transactionError := datastore.RunInTransaction(c, func(tc appengine.Context) error {
+		// Add default values
+    if item.Sort == 0 {
+      item.Sort = time.Now().Unix()
+    }
+    
+    if item.ID != "" {
+      // update
+  		key , err := datastore.DecodeKey(item.ID)
+  		if err != nil {
+  			return item, err
+  		}
+  		_, err = datastore.Put(c, key, &item)
+      	if err != nil {
+  			return item, err
+  		}
+  	} else {
+  		// new
+  		key, err := datastore.Put(c, datastore.NewIncompleteKey(c, "DayItems", userKey), &item)
+      	if err != nil {
+          	return item, err
+      	} else {
+      		item.ID = key.Encode()
+      	}
+  	}
+		
+		//return nil
+	//}, nil)
+  
+  
+	return item, nil //transactionError
 }
 
 func (repository *DayItemRepository) Find(dayAsInt int) ([]domain.DayItem, error) {
@@ -65,6 +71,10 @@ func (repository *DayItemRepository) Find(dayAsInt int) ([]domain.DayItem, error
   }
   
   q := datastore.NewQuery("DayItems").Filter("Day =", dayAsInt) //.Order("Sort")
+  
+  userKey := datastore.NewKey(c, "User", repository.namespace, 0, nil)
+	q = q.Ancestor(userKey)
+  
 	keys, err := q.GetAll(c, &dayItems)
   if err != nil {    
     return dayItems, err

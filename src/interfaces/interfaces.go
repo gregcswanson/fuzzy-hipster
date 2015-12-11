@@ -10,12 +10,13 @@ type BaseRepository struct {
 }
 
 type DomainContext struct {
-  Lists           ListRepository
-  User            UserRepository
-  Projects        ProjectRepository
-  ProjectItems    ProjectItemRepository
-  DayItems        DayItemRepository
-  MonthItems      MonthItemRepository
+  Lists           	ListRepository
+  User            	UserRepository
+  Projects        	ProjectRepository
+  ProjectItems    	ProjectItemRepository
+  DayItems        	DayItemRepository
+  DaySummaries		DaySummaryRepository
+  MonthItems      	MonthItemRepository
 }
 
 func NewDomainContext(request *http.Request, namespace string) *DomainContext {
@@ -45,6 +46,11 @@ func NewDomainContext(request *http.Request, namespace string) *DomainContext {
   domainContext.DayItems = DayItemRepository{}
 	domainContext.DayItems.request = request
 	domainContext.DayItems.namespace = namespace
+  
+  // setup the day summaries repository
+  domainContext.DaySummaries = DaySummaryRepository{}
+	domainContext.DaySummaries.request = request
+	domainContext.DaySummaries.namespace = namespace
   
   // setup the day items repository
   domainContext.MonthItems = MonthItemRepository{}
